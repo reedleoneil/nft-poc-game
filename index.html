@@ -28,7 +28,7 @@
         </div>
 
         <div class="col-12">
-            <table class="table table-bordered">
+            <table class="table table-borderless">
                 <thead>
                     <tr class="text-center">
                         <td><label>LEVEL</label></td>
@@ -54,7 +54,7 @@
         </div>
 
         <div id="cards-container" class="col-12 hidden">
-            <table class="table table-bordered">
+            <table class="table table-borderless">
                 <thead>
                     <tr class="col-12 text-center">
                         <td class="col-4"><label>CARD NAME</label></td>
@@ -97,7 +97,7 @@
 
     <div id="battle-container" class="row hidden">
         <div class="col-12">
-            <table class="table table-bordered">
+            <table class="table table-borderless">
                 <tr class="col-12">
                     <td class="col-5 text-center">
                         <h2 class="player-name"></h2>
@@ -123,7 +123,7 @@
                 </tr>
             </table>
 
-            <table class="table table-bordered">
+            <table class="table table-borderless">
                 <tr class="row text-center">
                     <td class="col-4">
                         <h2>First Move</h2>
@@ -145,7 +145,7 @@
                 </tr>
             </table>
 
-            <table class="table table-bordered">
+            <table class="table table-borderless">
                 <tr class="row text-center">
                     <td class="col-12" id="hand-cards-container"></td>
                 </tr>
@@ -158,6 +158,10 @@
 </div>
 
 <style>
+    .body-content {
+        padding-top: 0px;
+    }
+
     button.action {
         margin: 10px;
     }
@@ -779,10 +783,10 @@
             var interval = setInterval(function () {
                 count++;
 
-                $("#progress-hand-cards").attr("aria-valuenow", count * 33.33);
-                $("#progress-hand-cards").css("width", count * 33.33 + "%");
+                $("#progress-hand-cards").attr("aria-valuenow", count * 50);
+                $("#progress-hand-cards").css("width", count * 50 + "%");
 
-                if (count == 4) {
+                if (count == 3) {
                     $("#hand-cards-container").html(template);
                     clearInterval(interval);
                 }
@@ -803,7 +807,7 @@
                 $("#proceed-battle-container").addClass("hidden");
             }
 
-            $("#battle-logs-container").append(module.battleLogs);
+            $("#battle-logs-container").prepend(module.battleLogs);
             module.battleLogs = "";
 
             if (!result) {
