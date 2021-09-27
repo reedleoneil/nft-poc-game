@@ -1,0 +1,2208 @@
+<div class="container">
+    <div id="new-player-container" class="row hidden">
+        <div class="col-lg-12 text-center">
+            <h1>Hello New Player!</h1>
+        </div>
+
+        <div class="col-lg-4">
+            <h3>Please Enter Player Name</h3>
+            <input id="txt-player-name" type="text" class="form-control margin-lg-bottom" maxlength="20" />
+            <button id="btn-save-player" class="btn btn-success">SAVE</button>
+        </div>
+    </div>
+
+    <div id="saved-player-container" class="row hidden">
+        <div class="col-lg-12 text-center">
+            <h1>Hello <span class="player-name"></span></h1>
+        </div>
+
+        <div class="col-lg-12">
+            <table class="table table-borderless">
+                <thead>
+                    <tr class="text-center">
+                        <td><label>LEVEL</label></td>
+                        <td><label>CARDS</label></td>
+                        <td><label>ACTION</label></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="text-center">
+                        <td><h2>1</h2></td>
+                        <td>
+                            <button id="btn-view-cards" class="btn btn-default">View</button>
+                        </td>
+                        <td>
+                            <button id="btn-battle" class="btn btn-default">Battle!</button>
+                            <button class="btn btn-default">PVP</button>
+                            <button class="btn btn-default">Market</button>
+                            <button class="btn btn-default">Battle Logs</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="cards-container" class="col-lg-12 hidden">
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="text-center">
+                        <td class="col-lg-4"><label>CARD NAME</label></td>
+                        <td class="col-lg-2"><label>CARD TYPE</label></td>
+                        <td class="col-lg-6"><label>EFFECT</label></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                            <h2>Sword Slash</h2>
+                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/4334/4334081.png" />
+                        </td>
+                        <td class="type-label">ATTACK</td>
+                        <td class="h4">Deal 100 damage to the enemy.</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <h2>Battle Axe</h2>
+                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/1825/1825371.png" />
+                        </td>
+                        <td class="type-label">ATTACK</td>
+                        <td class="h4">Deal 130 damage to the enemy then inflict 20 damage to own HP after. Reduce damage reduction by 50% when enemy uses a <strong>Defense Card</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <h2>Arrow Shot</h2>
+                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/625/625445.png" />
+                        </td>
+                        <td class="type-label">ATTACK</td>
+                        <td class="h4">Deal 120 damage to the enemy if they play an <strong>Attack Card</strong> and only deal 80 damage if they play a <strong>Non-Attack Card (Defense/Support)</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <h2>Assassin's Dagger</h2>
+                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/5574/5574134.png" />
+                        </td>
+                        <td class="type-label">ATTACK</td>
+                        <td class="h4">Deal 60 damage to the enemy. Ignore 100% damage reduction from <strong>Defense Cards</strong> except <strong>Holy Shield</strong> and disable healing effect from <strong>Support Cards</strong> when played by your enemy.</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <h2>Mighty Shield</h2>
+                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/929/929429.png" />
+                        </td>
+                        <td class="type-label">DEFENSE</td>
+                        <td class="h4">Block 60% damage from the enemy.</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <h2>Holy Shield</h2>
+                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/1044/1044007.png" />
+                        </td>
+                        <td class="type-label">DEFENSE</td>
+                        <td class="h4">
+                            Block 40% damage and deflects 20% damage back to the enemy if they play an <strong>Attack Card</strong>. Enemy will receive 40% more healing if they play a <strong>Support Card</strong>.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <h2>Defend and Counter</h2>
+                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/602/602048.png" />
+                        </td>
+                        <td class="type-label">DEFENSE</td>
+                        <td class="h4">Blocks 30% damage from the enemy then deal 40 damage to them.</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <h2>Magic Heal</h2>
+                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/693/693337.png" />
+                        </td>
+                        <td class="type-label">SUPPORT</td>
+                        <td class="h4">Restore 50 HP</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <h2>Secret Herb</h2>
+                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/2917/2917995.png" />
+                        </td>
+                        <td class="type-label">SUPPORT</td>
+                        <td class="h4">Restore 90 HP when enemy plays a <strong>Defense Card</strong> and restore only 30 HP when enemy plays a <strong>Non-Defense Card (Attack/Support)</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <h2>Mercy Heal</h2>
+                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/1721/1721167.png" />
+                        </td>
+                        <td class="type-label">SUPPORT</td>
+                        <td class="h4">Restore 70 HP then restore 20 enemy HP.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="battle-container" class="row hidden">
+        <div class="col-lg-12">
+
+            <table class="table table-borderless">
+                <tr class="text-center">
+                    <td id="round-label" colspan="3" class="h1">Round 1</td>
+                </tr>
+                <tr>
+                    <td class="col-lg-5 text-center">
+                        <h2 class="player-name"></h2>
+                        <div class="progress margin-md-bottom">
+                            <div id="player-hp" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1000"
+                                 aria-valuemin="0" aria-valuemax="1000" style="width:100%">
+                                1000/1000
+                            </div>
+                        </div>
+                        <img class="img-avatar" src="https://cdn-icons-png.flaticon.com/512/4352/4352135.png" />
+                    </td>
+                    <td class="col-lg-2 text-center"><h1>VS.</h1></td>
+                    <td class="col-lg-5 text-center">
+                        <h2 id="enemy-name-label">Fluff Monster</h2>
+                        <div class="progress margin-md-bottom">
+                            <div id="enemy-hp" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1000"
+                                 aria-valuemin="0" aria-valuemax="1000" style="width:100%">
+                                1000/1000
+                            </div>
+                        </div>
+                        <img class="img-avatar" id="enemy-image" src="" />
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table table-borderless">
+                <tr class="row text-center">
+                    <td class="col-lg-4">
+                        <h2>First Move</h2>
+                        <img id="first-move" class="action card-moves" src="https://image.flaticon.com/icons/png/512/2997/2997933.png" />
+                    </td>
+                    <td class="col-lg-4">
+                        <h2>Second Move</h2>
+                        <img id="second-move" class="action card-moves" src="https://image.flaticon.com/icons/png/512/2997/2997933.png" />
+                    </td>
+                    <td class="col-lg-4">
+                        <h2>Last Move</h2>
+                        <img id="last-move" class="action card-moves" src="https://image.flaticon.com/icons/png/512/2997/2997933.png" />
+                    </td>
+                </tr>
+                <tr id="proceed-battle-container" class="hidden text-center">
+                    <td colspan="4">
+                        <button id="btn-confirm" class="btn btn-primary">Proceed Battle!</button>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table table-borderless">
+                <tr class="row text-center">
+                    <td class="col-lg-12" id="hand-cards-container"></td>
+                </tr>
+                <tr>
+                    <td id="battle-logs-container" colspan="3"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<style>
+    .body-content {
+        padding-top: 0px;
+    }
+
+    .img-avatar {
+        height: 150px;
+        width: 150px;
+    }
+
+    .type-label {
+        vertical-align: middle !important;
+        text-align: center;
+        font-size: 30px;
+    }
+
+    button.action {
+        margin: 10px;
+    }
+
+        button.action img {
+            height: 120px;
+            width: 120px;
+        }
+
+    .action {
+        height: 150px;
+        width: 150px;
+    }
+
+    .progress {
+        height: 20px;
+        font-size: 18px;
+    }
+
+    .progress-bar-success {
+        background-color: #5cb85c;
+    }
+
+    .progress-bar-warning {
+        background-color: #f0ad4e;
+    }
+
+    .progress-bar-danger {
+        background-color: #d9534f;
+    }
+</style>
+
+<script>
+    var module = {
+        profile: {},
+        battleLogs: "",
+        currentRound: 1,
+        maxHP: 900 + ((localStorage.getItem("Profile") ? JSON.parse(localStorage.getItem("Profile")).Level : 1) * 100),
+        cards: [
+            {
+                CardId: 1,
+                Name: "Sword Slash",
+                Type: "Attack",
+                Damage: 100,
+                Image: "https://cdn-icons-png.flaticon.com/512/4334/4334081.png"
+            },
+            {
+                CardId: 2,
+                Name: "Mighty Shield",
+                Type: "Defense",
+                Shield: 0.6,
+                Image: "https://cdn-icons-png.flaticon.com/512/929/929429.png"
+            },
+            {
+                CardId: 3,
+                Name: "Magic Heal",
+                Type: "Support",
+                Heal: 50,
+                Image: "https://cdn-icons-png.flaticon.com/512/693/693337.png"
+            },
+            {
+                CardId: 4,
+                Name: "Battle Axe",
+                Type: "Attack",
+                Damage: 100,
+                HPPenalTy: 20,
+                Image: "https://cdn-icons-png.flaticon.com/512/1825/1825371.png"
+            },
+            {
+                CardId: 5,
+                Name: "Secret Herb",
+                Type: "Support",
+                Heal: 90,
+                Heal2: 30,
+                Image: "https://cdn-icons-png.flaticon.com/512/2917/2917995.png"
+            },
+            {
+                CardId: 6,
+                Name: "Arrow Shot",
+                Type: "Attack",
+                Damage: 120,
+                Damage2: 80,
+                Image: "https://cdn-icons-png.flaticon.com/512/625/625445.png"
+            },
+            {
+                CardId: 7,
+                Name: "Holy Shield",
+                Type: "Defense",
+                Shield: 0.4,
+                Reflect: 0.2,
+                Heal: 0.4,
+                Image: "https://cdn-icons-png.flaticon.com/512/1044/1044007.png"
+            },
+            {
+                CardId: 8,
+                Name: "Assassin's Dagger",
+                Type: "Attack",
+                Damage: 60,
+                Image: "https://cdn-icons-png.flaticon.com/512/5574/5574134.png"
+            },
+            {
+                CardId: 9,
+                Name: "Mercy Heal",
+                Type: "Support",
+                Heal: 70,
+                EnemyHeal: 30,
+                Image: "https://cdn-icons-png.flaticon.com/512/1721/1721167.png"
+            },
+            {
+                CardId: 10,
+                Name: "Defend and Counter",
+                Type: "Support",
+                Damage: 40,
+                Shield: 0.3,
+                Image: "https://cdn-icons-png.flaticon.com/512/602/602048.png"
+            }
+        ],
+        cardDeck: [
+            {
+                Id: 1,
+                CardId: 1,
+                Name: "Sword Slash",
+                Type: "Attack",
+                Damage: 100,
+                Image: "https://cdn-icons-png.flaticon.com/512/4334/4334081.png"
+            },
+            {
+                Id: 2,
+                CardId: 2,
+                Name: "Mighty Shield",
+                Type: "Defense",
+                Shield: 0.6,
+                Image: "https://cdn-icons-png.flaticon.com/512/929/929429.png"
+            },
+            {
+                Id: 3,
+                CardId: 3,
+                Name: "Magic Heal",
+                Type: "Support",
+                Heal: 50,
+                Image: "https://cdn-icons-png.flaticon.com/512/693/693337.png"
+            },
+            {
+                Id: 4,
+                CardId: 4,
+                Name: "Battle Axe",
+                Type: "Attack",
+                Damage: 100,
+                HPPenalTy: 20,
+                Image: "https://cdn-icons-png.flaticon.com/512/1825/1825371.png"
+            },
+            {
+                Id: 5,
+                CardId: 5,
+                Name: "Secret Herb",
+                Type: "Support",
+                Heal: 90,
+                Heal2: 30,
+                Image: "https://cdn-icons-png.flaticon.com/512/2917/2917995.png"
+            },
+            {
+                Id: 6,
+                CardId: 6,
+                Name: "Arrow Shot",
+                Type: "Attack",
+                Damage: 120,
+                Damage2: 80,
+                Image: "https://cdn-icons-png.flaticon.com/512/625/625445.png"
+            },
+            {
+                Id: 7,
+                CardId: 7,
+                Name: "Holy Shield",
+                Type: "Defense",
+                Shield: 0.4,
+                Reflect: 0.2,
+                Heal: 0.4,
+                Image: "https://cdn-icons-png.flaticon.com/512/1044/1044007.png"
+            },
+            {
+                Id: 8,
+                CardId: 8,
+                Name: "Assassin's Dagger",
+                Type: "Attack",
+                Damage: 60,
+                Image: "https://cdn-icons-png.flaticon.com/512/5574/5574134.png"
+            },
+            {
+                Id: 9,
+                CardId: 9,
+                Name: "Mercy Heal",
+                Type: "Support",
+                Heal: 70,
+                EnemyHeal: 30,
+                Image: "https://cdn-icons-png.flaticon.com/512/1721/1721167.png"
+            },
+            {
+                Id: 10,
+                CardId: 10,
+                Name: "Defend and Counter",
+                Type: "Support",
+                Damage: 40,
+                Shield: 0.3,
+                Image: "https://cdn-icons-png.flaticon.com/512/602/602048.png"
+            },
+            {
+                Id: 11,
+                CardId: 1,
+                Name: "Sword Slash",
+                Type: "Attack",
+                Damage: 100,
+                Image: "https://cdn-icons-png.flaticon.com/512/4334/4334081.png"
+            },
+            {
+                Id: 12,
+                CardId: 2,
+                Name: "Mighty Shield",
+                Type: "Defense",
+                Shield: 0.6,
+                Image: "https://cdn-icons-png.flaticon.com/512/929/929429.png"
+            },
+            {
+                Id: 13,
+                CardId: 3,
+                Name: "Magic Heal",
+                Type: "Support",
+                Heal: 50,
+                Image: "https://cdn-icons-png.flaticon.com/512/693/693337.png"
+            },
+            {
+                Id: 14,
+                CardId: 4,
+                Name: "Battle Axe",
+                Type: "Attack",
+                Damage: 100,
+                HPPenalTy: 20,
+                Image: "https://cdn-icons-png.flaticon.com/512/1825/1825371.png"
+            },
+            {
+                Id: 15,
+                CardId: 5,
+                Name: "Secret Herb",
+                Type: "Support",
+                Heal: 90,
+                Heal2: 30,
+                Image: "https://cdn-icons-png.flaticon.com/512/2917/2917995.png"
+            },
+            {
+                Id: 16,
+                CardId: 6,
+                Name: "Arrow Shot",
+                Type: "Attack",
+                Damage: 120,
+                Damage2: 80,
+                Image: "https://cdn-icons-png.flaticon.com/512/625/625445.png"
+            },
+            {
+                Id: 17,
+                CardId: 7,
+                Name: "Holy Shield",
+                Type: "Defense",
+                Shield: 0.4,
+                Reflect: 0.2,
+                Heal: 0.4,
+                Image: "https://cdn-icons-png.flaticon.com/512/625/625445.png"
+            },
+            {
+                Id: 18,
+                CardId: 8,
+                Name: "Assassin's Dagger",
+                Type: "Attack",
+                Damage: 60,
+                Image: "https://cdn-icons-png.flaticon.com/512/1044/1044007.png"
+            },
+            {
+                Id: 19,
+                CardId: 9,
+                Name: "Mercy Heal",
+                Type: "Support",
+                Heal: 70,
+                EnemyHeal: 30,
+                Image: "https://cdn-icons-png.flaticon.com/512/1721/1721167.png"
+            },
+            {
+                Id: 20,
+                CardId: 10,
+                Name: "Defend and Counter",
+                Type: "Support",
+                Damage: 40,
+                Shield: 0.3,
+                Image: "https://cdn-icons-png.flaticon.com/512/602/602048.png"
+            },
+            {
+                Id: 21,
+                CardId: 1,
+                Name: "Sword Slash",
+                Type: "Attack",
+                Damage: 100,
+                Image: "https://cdn-icons-png.flaticon.com/512/4334/4334081.png"
+            },
+            {
+                Id: 22,
+                CardId: 2,
+                Name: "Mighty Shield",
+                Type: "Defense",
+                Shield: 0.6,
+                Image: "https://cdn-icons-png.flaticon.com/512/929/929429.png"
+            },
+            {
+                Id: 23,
+                CardId: 3,
+                Name: "Magic Heal",
+                Type: "Support",
+                Heal: 50,
+                Image: "https://cdn-icons-png.flaticon.com/512/693/693337.png"
+            },
+            {
+                Id: 24,
+                CardId: 4,
+                Name: "Battle Axe",
+                Type: "Attack",
+                Damage: 100,
+                HPPenalTy: 20,
+                Image: "https://cdn-icons-png.flaticon.com/512/1825/1825371.png"
+            },
+            {
+                Id: 25,
+                CardId: 5,
+                Name: "Secret Herb",
+                Type: "Support",
+                Heal: 90,
+                Heal2: 30,
+                Image: "https://cdn-icons-png.flaticon.com/512/2917/2917995.png"
+            },
+            {
+                Id: 26,
+                CardId: 6,
+                Name: "Arrow Shot",
+                Type: "Attack",
+                Damage: 120,
+                Damage2: 80,
+                Image: "https://cdn-icons-png.flaticon.com/512/625/625445.png"
+            },
+            {
+                Id: 27,
+                CardId: 7,
+                Name: "Holy Shield",
+                Type: "Defense",
+                Shield: 0.4,
+                Reflect: 0.2,
+                Heal: 0.4,
+                Image: "https://cdn-icons-png.flaticon.com/512/1044/1044007.png"
+            },
+            {
+                Id: 28,
+                CardId: 8,
+                Name: "Assassin's Dagger",
+                Type: "Attack",
+                Damage: 60,
+                Image: "https://cdn-icons-png.flaticon.com/512/5574/5574134.png"
+            },
+            {
+                Id: 29,
+                CardId: 9,
+                Name: "Mercy Heal",
+                Type: "Support",
+                Heal: 70,
+                EnemyHeal: 30,
+                Image: "https://cdn-icons-png.flaticon.com/512/1721/1721167.png"
+            },
+            {
+                Id: 30,
+                CardId: 10,
+                Name: "Defend and Counter",
+                Type: "Support",
+                Damage: 40,
+                Shield: 0.3,
+                Image: "https://cdn-icons-png.flaticon.com/512/602/602048.png"
+            },
+            {
+                Id: 31,
+                CardId: 1,
+                Name: "Sword Slash",
+                Type: "Attack",
+                Damage: 100,
+                Image: "https://cdn-icons-png.flaticon.com/512/4334/4334081.png"
+            },
+            {
+                Id: 32,
+                CardId: 2,
+                Name: "Mighty Shield",
+                Type: "Defense",
+                Shield: 0.6,
+                Image: "https://cdn-icons-png.flaticon.com/512/929/929429.png"
+            },
+            {
+                Id: 33,
+                CardId: 3,
+                Name: "Magic Heal",
+                Type: "Support",
+                Heal: 50,
+                Image: "https://cdn-icons-png.flaticon.com/512/693/693337.png"
+            },
+            {
+                Id: 34,
+                CardId: 4,
+                Name: "Battle Axe",
+                Type: "Attack",
+                Damage: 100,
+                HPPenalTy: 20,
+                Image: "https://cdn-icons-png.flaticon.com/512/1825/1825371.png"
+            },
+            {
+                Id: 35,
+                CardId: 5,
+                Name: "Secret Herb",
+                Type: "Support",
+                Heal: 90,
+                Heal2: 30,
+                Image: "https://cdn-icons-png.flaticon.com/512/2917/2917995.png"
+            },
+            {
+                Id: 36,
+                CardId: 6,
+                Name: "Arrow Shot",
+                Type: "Attack",
+                Damage: 120,
+                Damage2: 80,
+                Image: "https://cdn-icons-png.flaticon.com/512/625/625445.png"
+            },
+            {
+                Id: 37,
+                CardId: 7,
+                Name: "Holy Shield",
+                Type: "Defense",
+                Shield: 0.4,
+                Reflect: 0.2,
+                Heal: 0.4,
+                Image: "https://cdn-icons-png.flaticon.com/512/1044/1044007.png"
+            },
+            {
+                Id: 38,
+                CardId: 8,
+                Name: "Assassin's Dagger",
+                Type: "Attack",
+                Damage: 60,
+                Image: "https://cdn-icons-png.flaticon.com/512/5574/5574134.png"
+            },
+            {
+                Id: 39,
+                CardId: 9,
+                Name: "Mercy Heal",
+                Type: "Support",
+                Heal: 70,
+                EnemyHeal: 20,
+                Image: "https://cdn-icons-png.flaticon.com/512/1721/1721167.png"
+            },
+            {
+                Id: 40,
+                CardId: 10,
+                Name: "Defend and Counter",
+                Type: "Support",
+                Damage: 40,
+                Shield: 0.3,
+                Image: "https://cdn-icons-png.flaticon.com/512/602/602048.png"
+            }
+        ],
+        monsters: [
+            {
+                Level: 1,
+                Name: "Slime",
+                Image: "https://cdn-icons-png.flaticon.com/512/5484/5484595.png"
+            },
+            {
+                Level: 2,
+                Name: "Jack-o'-lantern",
+                Image: "https://cdn-icons-png.flaticon.com/512/685/685842.png"
+            },
+            {
+                Level: 3,
+                Name: "Zombie",
+                Image: "https://cdn-icons-png.flaticon.com/512/477/477162.png"
+            },
+            {
+                Level: 4,
+                Name: "Yeti",
+                Image: "https://cdn-icons-png.flaticon.com/512/1137/1137074.png"
+            },
+            {
+                Level: 5,
+                Name: "Fire Spirit",
+                Image: "https://cdn-icons-png.flaticon.com/512/3609/3609689.png"
+            },
+            {
+                Level: 6,
+                Name: "Werewolf",
+                Image: "https://cdn-icons-png.flaticon.com/512/3579/3579249.png"
+            },
+            {
+                Level: 7,
+                Name: "Alien",
+                Image: "https://cdn-icons-png.flaticon.com/512/4195/4195995.png"
+            },
+            {
+                Level: 8,
+                Name: "Cthulhu",
+                Image: "https://cdn-icons-png.flaticon.com/512/1137/1137046.png"
+            },
+            {
+                Level: 9,
+                Name: "Grim Reaper",
+                Image: "https://cdn-icons-png.flaticon.com/512/5431/5431626.png"
+            },
+            {
+                Level: 10,
+                Name: "Demon",
+                Image: "https://cdn-icons-png.flaticon.com/512/4133/4133351.png"
+            }
+        ],
+        attachEvents: function () {
+            $("#btn-battle").on("click", module.onBattle);
+            $("#btn-save-player").on("click", module.onSavePlayer);
+            $("#btn-view-cards").on("click", module.onViewCards);
+            $("body").delegate("button.action", "click", module.onSelectAction);
+            $("#btn-confirm").on("click", module.onConfirmBattle);
+        },
+        addEditProfile: function (data) {
+            module.profile = data;
+            localStorage.setItem("Profile", JSON.stringify(module.profile));
+        },
+        addHP: function (currentHP, heal, bonus) {
+            if (bonus) {
+                if (bonus < 1)
+                    heal += Math.round(heal * bonus);
+                else
+                    heal += bonus;
+            }
+
+            if ((currentHP + heal) > module.maxHP)
+                return module.maxHP;
+            else
+                return currentHP + heal;
+        },
+        deductHP: function (currentHP, damage, reduction) {
+            if (reduction) {
+                damage -= Math.round(damage * reduction);
+            }
+
+            var newHP = 0;
+            if ((currentHP - damage) > module.maxHP)
+                return module.maxHP;
+            else {
+                newHP = currentHP - damage
+
+                if (isNaN(newHP)) {
+                    return "Test";
+                }
+                else {
+                    return newHP;
+                }
+            }                
+            //currentHP - damage;
+        },
+        checkIfBattleReady: function () {
+            if ($("img[src='" + module.getIcons().Add + "']").length == 0) {
+                $("#proceed-battle-container").removeClass("hidden");
+            }
+            else {
+                $("#proceed-battle-container").addClass("hidden");
+            }
+        },
+        checkWinner: function (movePosition, data) {
+            var profile = module.getProfile();
+
+            if (profile.PlayerHP <= 0 && profile.EnemyHP <= 0) {
+                alert("Draw!");
+                module.showRoundBattleLog("Draw");
+            }
+            else if (profile.EnemyHP <= 0) {
+                alert("You Win!");
+                module.showRoundBattleLog("Win");
+            }
+            else if (profile.PlayerHP <= 0) {
+                alert("You Lose!");
+                module.showRoundBattleLog("Lose");
+            }
+            else {
+                movePosition++;
+
+                if (movePosition <= 3)
+                    module.getMoveResult(movePosition, data);
+                else
+                    module.showRoundBattleLog();
+            }
+        },
+        gameRound: function (round) {
+            $("#round-label").html("Round " + module.currentRound);
+
+            $(".card-moves").attr("src", module.getIcons().Add)
+                .removeAttr("title");
+
+            $("#proceed-battle-container").addClass("hidden");
+
+            var profile = module.getProfile();
+            var cardDrawCount = 5 - profile.PlayerHands.length;
+
+            if (profile.PlayerCards.length > 0 && profile.PlayerCards.length < 3) {
+                var playerCardsCount = 3 - profile.PlayerCards.length;
+                for (var i = 0; i < playerCardsCount; i++) {
+                    var ownRandom = Math.floor(Math.random() * profile.PlayerUsedCards.length);
+                    var enemyRandom = Math.floor(Math.random() * profile.EnemyUsedCards.length);
+
+                    profile.PlayerHands.push(profile.PlayerUsedCards[ownRandom]);
+                    profile.EnemyHands.push(profile.EnemyUsedCards[enemyRandom]);
+
+                    profile.PlayerUsedCards.splice(ownRandom, 1);
+                    profile.EnemyUsedCards.splice(enemyRandom, 1);
+
+                    module.addEditProfile(profile);
+                }
+            }
+            else if (profile.PlayerCards.length == 0) {
+                profile.PlayerCards = profile.PlayerUsedCards;
+                profile.PlayerUsedCards = [];
+
+                profile.EnemyCards = profile.EnemyUsedCards;
+                profile.EnemyUsedCards = [];
+
+                module.addEditProfile(profile);
+            }
+
+            for (var i = 0; i < cardDrawCount; i++) {
+                profile = module.getProfile();
+
+                if (profile.PlayerCards.length != 0) {
+                    var ownRandom = Math.floor(Math.random() * profile.PlayerCards.length);
+                    var enemyRandom = Math.floor(Math.random() * profile.EnemyCards.length);
+
+                    profile.PlayerHands.push(profile.PlayerCards[ownRandom]);
+                    profile.EnemyHands.push(profile.EnemyCards[enemyRandom]);
+
+                    profile.PlayerCards.splice(ownRandom, 1);
+                    profile.EnemyCards.splice(enemyRandom, 1);
+
+                    module.addEditProfile(profile);
+                }
+            }
+
+            module.setOwnCards();
+        },
+        getPlayerBattleLog: function (playerMove, enemyMove, profile) {
+            var battleLog = "";
+
+            if (playerMove == "Attack") {
+                if (enemyMove == "Attack") {
+                    battleLog += "You dealt <label class='text-danger'>100</label> damage using <label>ATTACK</label>.<br/>";
+                    battleLog += "You took <label class='text-danger'>100</label> damage from <label>ATTACK (" + profile.PlayerHP + ")</label>.<br/>";
+
+                    battleLog += "Enemy dealt <label class='text-danger'>100</label> damage using <label>ATTACK</label>.<br/>";
+                    battleLog += "Enemy took <label class='text-danger'>100</label> damage from <label>ATTACK (" + profile.EnemyHP + ")</label>.<br/>";
+                }
+
+                if (enemyMove == "Defend") {
+                    battleLog += "You dealt <label class='text-danger'>20</label> damage using <label>ATTACK</label>.<br/>";
+
+                    battleLog += "Enemy took <label class='text-danger'>20</label> damage from <label>ATTACK (" + profile.EnemyHP + ")</label>.<br/>";
+                    battleLog += "Enemy blocked <label class='text-info'>80</label> damage using <label>DEFEND</label>.<br/>";
+                }
+
+                if (enemyMove == "Heal") {
+                    battleLog += "You dealt <label class='text-danger'>100</label> damage using <label>ATTACK</label>.<br/>";
+
+                    battleLog += "Enemy took <label class='text-danger'>100</label> damage from <label>ATTACK (" + (profile.EnemyHP - 60) + ")</label>.<br/>";
+                    battleLog += "Enemy restored <label class='text-success'>60</label> HP using <label>HEAL (" + profile.EnemyHP + ")</label>.<br/>";
+                }
+
+                if (enemyMove == "Brute Force") {
+                    battleLog += "You dealt <label class='text-danger'>100</label> damage using <label>ATTACK</label>.<br/>";
+                    battleLog += "You took <label class='text-danger'>100</label> damage from <label>BRUTE FORCE (" + profile.PlayerHP + ")</label>.<br/>";
+
+                    battleLog += "Enemy dealt <label class='text-danger'>100</label> damage using <label>BRUTE FORCE</label>.<br/>";
+                    battleLog += "Enemy took <label class='text-danger'>100</label> damage from <label>ATTACK (" + (profile.EnemyHP + 20) + ")</label>.<br/>";
+                    battleLog += "Enemy took <label class='text-danger'>20</label> damage from <label>BRUTE FORCE effect (" + profile.EnemyHP + ")</label>.<br/>";
+                }
+            }
+
+            if (playerMove == "Defend") {
+                if (enemyMove == "Attack") {
+                    battleLog += "You blocked <label class='text-info'>80</label> damage using <label>DEFEND</label>.<br/>";
+                    battleLog += "You took <label class='text-danger'>20</label> damage from <label>ATTACK (" + profile.PlayerHP + ")</label>.<br/>";
+
+                    battleLog += "Enemy dealt <label class='text-danger'>20</label> damage using <label>ATTACK</label>.<br/>";
+                }
+
+                if (enemyMove == "Defend") {
+                    battleLog += "You used <label>DEFEND</label> to block incoming <label class='text-info'>80</label> damage.<br/>";
+
+                    battleLog += "Enemy used <label>DEFEND</label> to block incoming <label class='text-info'>80</label> damage.<br/>";
+                }
+
+                if (enemyMove == "Heal") {
+                    battleLog += "You used <label>DEFEND</label> to block incoming <label class='text-info'>80</label> damage.<br/>";
+
+                    battleLog += "Enemy restored <label class='text-success'>60</label> HP using <label>HEAL (" + profile.EnemyHP + ")</label>.<br/>";
+                }
+
+                if (enemyMove == "Brute Force") {
+                    battleLog += "You took <label class='text-danger'>70</label> damage from <label>BRUTE FORCE (" + profile.PlayerHP + ")</label>.<br/>";
+                    battleLog += "You blocked <label class='text-info'>30</label> damage using <label>DEFEND</label>.<br/>";
+
+                    battleLog += "Enemy dealt <label class='text-danger'>70</label> damage using <label>BRUTE FORCE</label>.<br/>";
+                    battleLog += "Enemy took <label class='text-danger'>20</label> damage from <label>BRUTE FORCE effect (" + profile.EnemyHP + ")</label>.<br/>";
+                }
+            }
+
+            if (playerMove == "Heal") {
+                if (enemyMove == "Attack") {
+                    battleLog += "You restored <label class='text-success'>60</label> HP using <label>HEAL (" + (profile.PlayerHP - 100) + ")</label>.<br/>";
+                    battleLog += "You took <label class='text-danger'>100</label> damage from <label>ATTACK (" + profile.PlayerHP + ")</label>.<br/>";
+
+                    battleLog += "Enemy dealt <label class='text-danger'>100</label> damage using <label>ATTACK</label>.<br/>";
+                }
+
+                if (enemyMove == "Defend") {
+                    battleLog += "You restored <label class='text-success'>60</label> HP using <label>HEAL (" + profile.PlayerHP + ")</label>.<br/>";
+
+                    battleLog += "Enemy used <label>DEFEND</label> to block incoming <label class='text-info'>80</label> damage.<br/>";
+                }
+
+                if (enemyMove == "Heal") {
+                    battleLog += "You restored <label class='text-success'>60</label> HP using <label>HEAL (" + profile.PlayerHP + ")</label>.<br/>";
+
+                    battleLog += "Enemy restored <label class='text-success'>60</label> HP using <label>HEAL (" + profile.EnemyHP + ")</label>.<br/>";
+                }
+
+                if (enemyMove == "Brute Force") {
+                    battleLog += "You restored <label class='text-success'>60</label> HP using <label>HEAL (" + (profile.PlayerHP - 100) + ")</label>.<br/>";
+                    battleLog += "You took <label class='text-danger'>100</label> damage from <label>BRUTE FORCE (" + (profile.PlayerHP - 100) + ")</label>.<br/>";
+
+                    battleLog += "Enemy dealt <label class='text-danger'>100</label> damage using <label>BRUTE FORCE</label>.<br/>";
+                    battleLog += "Enemy took <label class='text-danger'>20</label> damage from <label>BRUTE FORCE effect (" + profile.EnemyHP + ")</label>.<br/>";
+                }
+            }
+
+            if (playerMove == "Brute Force") {
+                if (enemyMove == "Attack") {
+                    battleLog += "You dealt <label class='text-danger'>100</label> damage using <label>BRUTE FORCE</label>.<br/>";
+                    battleLog += "You took <label class='text-danger'>100</label> damage from <label>ATTACK (" + (profile.PlayerHP + 20) + ")</label>.<br/>";
+                    battleLog += "You took <label class='text-danger'>20</label> damage from <label>BRUTE FORCE effect (" + profile.PlayerHP + ")</label>.<br/>";
+
+                    battleLog += "Enemy dealt <label class='text-danger'>100</label> damage using <label>ATTACK</label>.<br/>";
+                    battleLog += "Enemy took <label class='text-danger'>100</label> damage from <label>BRUTE FORCE (" + profile.EnemyHP + ")</label>.<br/>";
+                }
+
+                if (enemyMove == "Defend") {
+                    battleLog += "You dealt <label class='text-danger'>70</label> damage using <label>BRUTE FORCE</label>.<br/>";
+                    battleLog += "You took <label class='text-danger'>20</label> damage from <label>BRUTE FORCE effect (" + profile.PlayerHP + ")</label>.<br/>";
+
+                    battleLog += "Enemy blocked <label class='text-info'>30</label> damage using <label>DEFEND</label>.<br/>";
+                    battleLog += "Enemy took <label class='text-danger'>70</label> damage from <label>BRUTE FORCE (" + profile.EnemyHP + ")</label>.<br/>";
+                }
+
+                if (enemyMove == "Heal") {
+                    battleLog += "You dealt <label class='text-danger'>100</label> damage using <label>BRUTE FORCE</label>.<br/>";
+                    battleLog += "You took <label class='text-danger'>20</label> damage from <label>BRUTE FORCE effect (" + profile.PlayerHP + ")</label>.<br/>";
+
+                    battleLog += "Enemy took <label class='text-danger'>100</label> damage from <label>BRUTE FORCE (" + (profile.EnemyHP - 60) + ")</label>.<br/>";
+                    battleLog += "Enemy restored <label class='text-success'>60</label> HP using <label>HEAL (" + profile.EnemyHP + ")</label>.<br/>";
+                }
+
+                if (enemyMove == "Brute Force") {
+                    battleLog += "You dealt <label class='text-danger'>100</label> damage using <label>BRUTE FORCE</label>.<br/>";
+                    battleLog += "You took <label class='text-danger'>100</label> damage from <label>BRUTE FORCE (" + (profile.PlayerHP + 20) + ")</label>.<br/>";
+                    battleLog += "You took <label class='text-danger'>20</label> damage from <label>BRUTE FORCE effect (" + profile.PlayerHP + ")</label>.<br/>";
+
+                    battleLog += "Enemy dealt <label class='text-danger'>100</label> damage using <label>BRUTE FORCE</label>.<br/>";
+                    battleLog += "Enemy took <label class='text-danger'>100</label> damage from <label>BRUTE FORCE (" + (profile.EnemyHP + 20) + ")</label>.<br/>";
+                    battleLog += "Enemy took <label class='text-danger'>20</label> damage from <label>BRUTE FORCE effect (" + profile.EnemyHP + ")</label>.<br/>";
+                }
+            }
+
+            battleLog += "<br/>";
+
+            return battleLog;
+        },
+        getIcons: function () {
+            return {
+                Attack: "https://image.flaticon.com/icons/png/512/2746/2746914.png",
+                Defend: "https://image.flaticon.com/icons/png/512/46/46887.png",
+                Heal: "https://image.flaticon.com/icons/png/512/2696/2696455.png",
+                BruteForce: "https://image.flaticon.com/icons/png/512/514/514143.png",
+                Add: "https://image.flaticon.com/icons/png/512/2997/2997933.png",
+                Undo: "https://image.flaticon.com/icons/png/512/2350/2350172.png"
+            };
+        },
+        getCardDeckById: function (id) {
+            var cards = JSON.parse(localStorage.getItem("CardDeck"));
+
+            return cards.filter(function (i) {
+                return i.Id == id;
+            })[0];
+        },
+        getCardById: function (id) {
+            var cards = JSON.parse(localStorage.getItem("CardDeck"));
+
+            return cards.filter(function (i) {
+                return i.CardId == id;
+            })[0];
+        },
+        getCardBySrc: function (src) {
+            var cards = JSON.parse(localStorage.getItem("CardDeck"));
+
+            return cards.filter(function (i) {
+                return i.Image == src;
+            })[0];
+        },
+        getMovesDetails: function (position) {
+            if (position == "all") {
+                return {
+                    FirstTitle: $("#first-move").attr("title"),
+                    FirstId: $("#first-move").data("id"),
+                    SecondTitle: $("#second-move").attr("title"),
+                    SecondId: $("#second-move").data("id"),
+                    LastTitle: $("#last-move").attr("title"),
+                    LastId: $("#last-move").data("id"),
+                };
+            }
+            else {
+                var positionSrc = $("#" + position + "-move").attr("src");
+                var positionTitle = $("#" + position + "-move").attr("title");
+
+                $("#" + position + "-move").removeAttr("title");
+                $("#" + position + "-move").removeAttr("data-id");
+                $("#" + position + "-move").attr("src", module.getIcons().Add);
+
+                return {
+                    Src: positionSrc,
+                    Title: positionTitle,
+                };
+            }
+        },
+        getLocalStorageProfile: function () {
+            var profile = JSON.parse(localStorage.getItem("Profile"));
+
+            if (!profile)
+                return {};
+
+            if (!profile.Level || !profile.EnemyLevel) {
+                profile.Level = profile.Level || 1;
+                profile.EnemyLevel = profile.EnemyLevel || 1;
+                module.addEditProfile(profile);
+                module.profile = profile;
+            }
+
+            return JSON.parse(localStorage.getItem("Profile"));
+        },
+        getProfile: function () {
+            return module.profile;
+        },
+        getBattleLog: function (profile, isPlayer, type, playerMove, enemyMove) {
+            if (isPlayer) {
+                switch (type) {
+                    case "dealt":
+                        if (playerMove.Name == "Arrow Shot" && enemyMove.Type != "Attack") {
+                            return "You dealt <label class='text-danger'>" + playerMove.Damage2 - (playerMove.Damage2 * enemyMove.Shield) + "</label> damage using <strong>" + playerMove.Name + "</strong>.<br/>";
+                        }
+                        else if (playerMove.Name == "Holy Shield") {
+                            return "You dealt <label class='text-danger'>" + Math.round(enemyMove.Damage * playerMove.Reflect) + "</label> damage using <strong>" + playerMove.Name + "</strong>.<br/>";
+                        }
+                        else {
+                            if (enemyMove.Type == "Defense") {
+                                console.log("Player Damage: " + playerMove.Damage + " - Enemy Shield: " + enemyMove.Shield);
+                                console.log("Damage Dealt: " + playerMove.Damage - Math.round(playerMove.Damage * enemyMove.Shield));
+                                return "You dealt <label class='text-danger'>" + playerMove.Damage - Math.round(playerMove.Damage * enemyMove.Shield) + "</label> damage using <strong>" + playerMove.Name + "</strong>.<br/>";
+                            }
+                            else {
+                                return "You dealt <label class='text-danger'>" + playerMove.Damage + "</label> damage using <strong>" + playerMove.Name + "</strong>.<br/>";
+                            }
+                        }
+                    case "took":
+                        if (playerMove.Type == "Shield") {
+                            return "You took <label class='text-danger'>" + enemyMove.Damage - Math.round(enemyMove.Damage * playerMove.Shield) + "</label> damage from <strong>" + enemyMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
+                        }
+                        else {
+                            return "You took <label class='text-danger'>" + enemyMove.Damage + "</label> damage from <strong>" + enemyMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
+                        }
+                    case "penalty":
+                        return "You took <label class='text-danger'>" + playerMove.HPPenalTy + "</label> damage from the <strong>" + playerMove.Name + "</strong> penalty effect (" + profile.PlayerHP + ").<br/>";
+                    case "block":
+                        if (enemyMove.Type == "Defense") {
+                            return "You used <strong>" + playerMove.Name + "</strong> to block <label class='text-info'>" + playerMove.Shield * 100 + "%</label> incoming damage.<br/>";
+                        }
+                        else {
+                            return "You blocked incoming <label class='text-info'>" + Math.round(enemyMove.Damage * playerMove.Shield) + "</label> damage using <strong>" + playerMove.Name + "</strong>.<br/>";
+                        }
+                    case "heal":
+                        if (playerMove.Name != "Mercy Heal" && enemyMove.Name == "Mercy Heal") {
+                            return "You restored <label class='text-success'>" + enemyMove.EnemyHeal + "</label> HP from enemy card <strong>" + enemyMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
+                        }
+                        else if (playerMove.Name == "Secret Herb" && enemyMove.Type != "Defense") {
+                            return "You restored <label class='text-success'>" + playerMove.Heal2 + "</label> HP using <strong>" + playerMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
+                        }
+                        else {
+                            return "You restored <label class='text-success'>" + playerMove.Heal + "</label> HP using <strong>" + playerMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
+                        }
+                }
+            }
+            else {
+                switch (type) {
+                    case "dealt":
+                        if (enemyMove.Name == "Arrow Shot" && playerMove.Type != "Attack") {
+                            return "Enemy dealt <label class='text-danger'>" + enemyMove.Damage2 - (enemyMove.Damage2 * playerMove.Shield) + "</label> damage using <strong>" + enemyMove.Name + "</strong>.<br/>";
+                        }
+                        else if (enemyMove.Name == "Holy Shield") {
+                            return "Enemy dealt <label class='text-danger'>" + Math.round(playerMove.Damage * enemyMove.Reflect) + "</label> damage using <strong>" + enemyMove.Name + "</strong>.<br/>";
+                        }
+                        else {
+                            if (playerMove.Type == "Defense") {
+                                return "Enemy dealt <label class='text-danger'>" + enemyMove.Damage - Math.round(enemyMove.Damage * playerMove.Shield) + "</label> damage using <strong>" + enemyMove.Name + "</strong>.<br/>";
+                            }
+                            else {
+                                return "Enemy dealt <label class='text-danger'>" + enemyMove.Damage + "</label> damage using <strong>" + enemyMove.Name + "</strong>.<br/>";
+                            }
+                        }
+                    case "took":
+                        if (enemyMove.Type == "Defense") {
+                            return "Enemy took <label class='text-danger'>" + playerMove.Damage - Math.round(playerMove.Damage * enemyMove.Shield) + "</label> damage from <strong>" + playerMove.Name + "</strong> (" + profile.EnemyHP + ").<br/>";
+                        }
+                        else {
+                            return "Enemy took <label class='text-danger'>" + playerMove.Damage + "</label> damage from <strong>" + playerMove.Name + "</strong> (" + profile.EnemyHP + ").<br/>";
+                        }
+                    case "penalty":
+                        return "Enemy took <label class='text-danger'>" + enemyMove.HPPenalTy + "</label> damage from <strong>" + enemyMove.Name + "</strong> penalty effect (" + profile.EnemyHP + ").<br/>";
+                    case "block":
+                        if (playerMove.Type == "Defense") {
+                            return "Enemy used <strong>" + enemyMove.Name + "</strong> to block <label class='text-info'>" + enemyMove.Shield * 100 + "%</label> incoming damage.<br/>";
+                        }
+                        else {
+                            return "Enemy blocked incoming <label class='text-info'>" + Math.round(playerMove.Damage * enemyMove.Shield) + "</label> damage using <strong>" + enemyMove.Name + "</strong>.<br/>";
+                        }
+                    case "heal":
+                        if (enemyMove.Name != "Mercy Heal" && playerMove.Name == "Mercy Heal") {
+                            return "Enemy restored <label class='text-success'>" + playerMove.EnemyHeal + "</label> HP from opponent card <strong>" + playerMove.Name + "</strong> (" + profile.EnemyHP + ").<br/>";
+                        }
+                        else if (enemyMove.Name == "Secret Herb" && playerMove.Type != "Defense") {
+                            return "Enemy restored <label class='text-success'>" + enemyMove.Heal2 + "</label> HP using <strong>" + enemyMove.Name + "</strong> (" + profile.EnemyHP + ").<br/>";
+                        }
+                        else {
+                            return "Enemy restored <label class='text-success'>" + enemyMove.Heal + "</label> HP using <strong>" + enemyMove.Name + "</strong> (" + profile.EnemyHP + ").<br/>";
+                        }
+                }
+            }
+        },
+        getHPCalculation: function (profile, playerMove, enemyMove) {
+            if (playerMove.Name == "Sword Slash") {
+                if (enemyMove.Name == "Sword Slash") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Battle Axe") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, false, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Arrow Shot") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Assassin's Dagger") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Mighty Shield") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Holy Shield") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect));
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Defend and Counter") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Magic Heal") {
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, false, "heal", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Secret Herb") {
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal2);
+                    module.battleLogs += module.getBattleLog(profile, false, "heal", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Mercy Heal") {
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, false, "heal", playerMove, enemyMove);
+
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                    module.battleLogs += module.getBattleLog(profile, true, "heal", playerMove, enemyMove);
+                }
+            }
+            else if (playerMove.Name == "Battle Axe") {
+                if (enemyMove.Name == "Sword Slash") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, true, "penalty", playerMove, enemyMove);                  
+                }
+                else if (enemyMove.Name == "Battle Axe") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, true, "penalty", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, false, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Arrow Shot") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, true, "penalty", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Assassin's Dagger") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, true, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Mighty Shield") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield / 2);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, true, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Holy Shield") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect));
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, true, "penalty", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Defend and Counter") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, true, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Magic Heal") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, true, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Secret Herb") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal2);
+
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, true, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Mercy Heal") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, true, "penalty", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                }
+            }
+            else if (playerMove.Name == "Arrow Shot") {
+                if (enemyMove.Name == "Sword Slash") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                }
+                else if (enemyMove.Name == "Battle Axe") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, false, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Arrow Shot") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                }
+                else if (enemyMove.Name == "Assassin's Dagger") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Mighty Shield") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage2, enemyMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, true, "block", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Holy Shield") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, Math.round(playerMove.Damage2 * enemyMove.Reflect));
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage2, enemyMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Defend and Counter") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage2 - enemyMove.Shield);
+                }
+                else if (enemyMove.Name == "Magic Heal") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage2);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                }
+                else if (enemyMove.Name == "Secret Herb") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage2);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal2);
+                }
+                else if (enemyMove.Name == "Mercy Heal") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "heal", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage2);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, false, "heal", playerMove, enemyMove);
+                }
+            }
+            else if (playerMove.Name == "Assassin's Dagger") {
+                if (enemyMove.Name == "Sword Slash") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Battle Axe") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, false, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Arrow Shot") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Assassin's Dagger") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Mighty Shield") {
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Holy Shield") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect));
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Defend and Counter") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Magic Heal") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                }
+                else if (enemyMove.Name == "Secret Herb") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                }
+                else if (enemyMove.Name == "Mercy Heal") {
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);                    
+                }
+            }
+            else if (playerMove.Name == "Mighty Shield") {
+                if (enemyMove.Name == "Sword Slash") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage, playerMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "block", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Battle Axe") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage, playerMove.Shield / 2);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "block", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, false, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Arrow Shot") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage2, playerMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "block", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Assassin's Dagger") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Mighty Shield") {
+                    module.battleLogs += module.getBattleLog(profile, true, "block", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Holy Shield") {
+                    module.battleLogs += module.getBattleLog(profile, true, "block", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Defend and Counter") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage, playerMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "block", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Magic Heal") {
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                }
+                else if (enemyMove.Name == "Secret Herb") {
+                    module.battleLogs += module.getBattleLog(profile, true, "block", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, false, "heal", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Mercy Heal") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                }
+            }
+            else if (playerMove.Name == "Holy Shield") {
+                if (enemyMove.Name == "Sword Slash") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.Damage);
+                }
+                else if (enemyMove.Name == "Battle Axe") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.Damage);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, false, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Arrow Shot") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.Damage2);
+                }
+                else if (enemyMove.Name == "Assassin's Dagger") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                }
+                else if (enemyMove.Name == "Mighty Shield") {
+
+                }
+                else if (enemyMove.Name == "Holy Shield") {
+                    module.battleLogs += module.getBattleLog(profile, true, "block", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Defend and Counter") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.Damage);
+                }
+                else if (enemyMove.Name == "Magic Heal") {
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal, 0.5);
+                }
+                else if (enemyMove.Name == "Secret Herb") {
+                    module.battleLogs += module.getBattleLog(profile, true, "block", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal, playerMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, false, "heal", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Mercy Heal") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal, 0.5);
+                }
+            }
+            else if (playerMove.Name == "Defend and Counter") {
+                if (enemyMove.Name == "Sword Slash") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage, playerMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Battle Axe") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, false, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Arrow Shot") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage2, playerMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Assassin's Dagger") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Mighty Shield") {
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "block", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Holy Shield") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect), playerMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "block", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Defend and Counter") {
+
+                }
+                else if (enemyMove.Name == "Magic Heal") {
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                }
+                else if (enemyMove.Name == "Secret Herb") {
+                    module.battleLogs += module.getBattleLog(profile, true, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "block", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, "took", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, false, "heal", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Mercy Heal") {
+                    profile.PlayerHP = module.addHP(profile.EnemyHP, enemyMove.EnemyHeal);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                }
+            }
+            else if (playerMove.Name == "Magic Heal") {
+                if (enemyMove.Name == "Sword Slash") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                }
+                else if (enemyMove.Name == "Battle Axe") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, true, "heal", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, false, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Arrow Shot") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage2);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, true, "heal", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Assassin's Dagger") {
+                    profile.PlayerHP = module.deductHP(enemyMove.Damage);
+                }
+                else if (enemyMove.Name == "Mighty Shield") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                }
+                else if (enemyMove.Name == "Holy Shield") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal, enemyMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, true, "heal", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Defend and Counter") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                }
+                else if (enemyMove.Name == "Magic Heal") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                }
+                else if (enemyMove.Name == "Secret Herb") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, true, "heal", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal2);
+                    module.battleLogs += module.getBattleLog(profile, false, "heal", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Mercy Heal") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                }
+            }
+            else if (playerMove.Name == "Secret Herb") {
+                if (enemyMove.Name == "Sword Slash") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal2);
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.Damage);
+                }
+                else if (enemyMove.Name == "Battle Axe") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal2);
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, false, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Arrow Shot") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal2);
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage2);
+                }
+                else if (enemyMove.Name == "Assassin's Dagger") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                }
+                else if (enemyMove.Name == "Mighty Shield") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                }
+                else if (enemyMove.Name == "Holy Shield") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal, enemyMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, true, "heal", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Defend and Counter") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, true, "heal", playerMove, enemyMove);
+
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Magic Heal") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal2);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                }
+                else if (enemyMove.Name == "Secret Herb") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal2);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal2);
+                }
+                else if (enemyMove.Name == "Mercy Heal") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal2);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                }
+            }
+            else if (playerMove.Name == "Mercy Heal") {
+                if (enemyMove.Name == "Sword Slash") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
+
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                }
+                else if (enemyMove.Name == "Battle Axe") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal2);
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+
+                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, false, "penalty", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Arrow Shot") {
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage2);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, true, "heal", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
+                    module.battleLogs += module.getBattleLog(profile, false, "heal", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Assassin's Dagger") {
+                    profile.PlayerHP = module.deductHP(enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, "took", playerMove, enemyMove);
+                    
+                    module.battleLogs += module.getBattleLog(profile, false, "dealt", playerMove, enemyMove);                    
+                }
+                else if (enemyMove.Name == "Mighty Shield") {
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                }
+                else if (enemyMove.Name == "Holy Shield") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal, enemyMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, true, "heal", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);                    
+                    module.battleLogs += module.getBattleLog(profile, false, "block", playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, "heal", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Defend and Counter") {
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+
+                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                }
+                else if (enemyMove.Name == "Magic Heal") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, true, "heal", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, false, "heal", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
+                    module.battleLogs += module.getBattleLog(profile, false, "heal", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Secret Herb") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, true, "heal", playerMove, enemyMove);                    
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal2);
+                    module.battleLogs += module.getBattleLog(profile, false, "heal", playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
+                    module.battleLogs += module.getBattleLog(profile, false, "heal", playerMove, enemyMove);
+                }
+                else if (enemyMove.Name == "Mercy Heal") {
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+
+                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.Heal2);
+                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.Heal2);
+                }
+            }
+
+            return profile;
+        },
+        getMoveResult: function (movePosition, data) {
+            var moves = module.getMovesDetails("all");
+            var enemyMove = "";
+            switch (movePosition) {
+                case 1:
+                    playerMove = module.getCardDeckById(moves.FirstId);
+                    enemyMove = data[0];
+                    module.battleLogs += "<strong>First Move:</strong> ";
+                    break;
+                case 2:
+                    playerMove = module.getCardDeckById(moves.SecondId);
+                    enemyMove = data[1];
+                    module.battleLogs += "<br/><strong>Second Move:</strong> ";
+                    break;
+                case 3:
+                    playerMove = module.getCardDeckById(moves.LastId);
+                    enemyMove = data[2];
+                    module.battleLogs += "<br/><strong>Last Move:</strong> ";
+                    break;
+            }
+
+            module.battleLogs += "You used <strong>" + playerMove.Name.toUpperCase() + "</strong>. Enemy used <strong>" + enemyMove.Name.toUpperCase() + "</strong>.<br/>";
+
+            var profile = module.getProfile();
+
+            profile = module.getHPCalculation(profile, playerMove, enemyMove);
+
+            //module.battleLogs += module.getPlayerBattleLog(playerMove.Name, enemyMove.Name, profile);
+
+            module.addEditProfile(profile);
+
+            module.updateHPBars();
+
+            module.checkWinner(movePosition, data);
+        },
+        onLoad: function () {
+            module.attachEvents();
+
+            localStorage.setItem("CardDeck", JSON.stringify(module.cardDeck));
+
+            if (module.getLocalStorageProfile().Name) {
+                module.profile = module.getLocalStorageProfile();
+
+                $(".player-name").text(module.getLocalStorageProfile().Name);
+                $("#saved-player-container").removeClass("hidden");
+            }
+            else {
+                $("#new-player-container").removeClass("hidden");
+            }
+        },
+        onBattle: function () {
+            $("#saved-player-container").addClass("hidden");
+            $("#battle-container").removeClass("hidden");
+
+            var profile = module.getProfile();
+
+            var monster = module.monsters.filter(function (i) {
+                return i.Level == profile.Level;
+            })[0];
+
+            $("#enemy-name-label").text(monster.Name);
+            $("#enemy-image").attr("src", monster.Image);
+
+            profile.PlayerHP = module.maxHP;
+            profile.EnemyHP = module.maxHP;
+            profile.PlayerCards = JSON.parse(localStorage.getItem("CardDeck"));
+            profile.EnemyCards = JSON.parse(localStorage.getItem("CardDeck"));;
+            profile.PlayerHands = [];
+            profile.EnemyHands = [];
+            profile.PlayerUsedCards = [];
+            profile.EnemyUsedCards = [];
+
+            module.addEditProfile(profile);
+
+            module.gameRound(module.currentRound);
+        },
+        onConfirmBattle: function () {
+            var profile = module.getProfile();
+
+            var moves = module.getMovesDetails("all");
+
+            var firstMove = module.getCardDeckById(moves.FirstId);
+            var secondMove = module.getCardDeckById(moves.SecondId);
+            var lastMove = module.getCardDeckById(moves.LastId);
+
+            profile.PlayerUsedCards.push(firstMove);
+            profile.PlayerUsedCards.push(secondMove);
+            profile.PlayerUsedCards.push(lastMove);
+
+            profile.PlayerHands = profile.PlayerHands.filter(function (i) {
+                return i.Id != firstMove.Id
+                    && i.Id != secondMove.Id
+                    && i.Id != lastMove.Id;
+            });
+
+            var enemyActions = [];
+            for (var i = 0; i < 3; i++) {
+                var enemyRandom = Math.floor(Math.random() * profile.EnemyHands.length);
+
+                enemyActions.push(profile.EnemyHands[enemyRandom]);
+                profile.EnemyUsedCards.push(profile.EnemyHands[enemyRandom]);
+
+                profile.EnemyHands.splice(enemyRandom, 1);
+
+                module.addEditProfile(profile);
+            }
+
+            module.battleLogs += "<h3>Round " + module.currentRound + "</h3>";
+
+            module.getMoveResult(1, enemyActions);
+        },
+        onSavePlayer: function () {
+            module.addEditProfile({ Name: $("#txt-player-name").val() });
+            $("#new-player-container").addClass("hidden");
+
+            $(".player-name").text(module.getProfile().Name);
+            $("#saved-player-container").removeClass("hidden");
+        },
+        onSelectAction: function () {
+            var cardId = $(this).data("id"),
+                icons = module.getIcons(),
+                src = "",
+                action = "";
+
+            if (cardId) {
+                var card = module.getCardDeckById(cardId);;
+
+                action = card.Name;
+            }
+            else if (cardId == 0) {
+                action = "Undo";
+            }
+
+            if ($("#first-move").attr("src") == icons.Add
+                && action != "Undo") {
+                $("#first-move").attr("src", card.Image)
+                    .attr("title", action)
+                    .data("id", cardId);
+
+                $(this).data("id", 0);
+                $(this).find("img").attr("src", icons.Undo);
+
+                $(this).attr("title", "Undo")
+                    .attr("position", "first");
+            }
+            else if ($("#second-move").attr("src") == icons.Add
+                && action != "Undo") {
+                $("#second-move").attr("src", card.Image)
+                    .attr("title", action)
+                    .data("id", cardId);
+
+                $(this).data("id", 0);
+                $(this).find("img").attr("src", icons.Undo);
+
+                $(this).attr("title", "Undo")
+                    .attr("position", "second");
+            }
+            else if ($("#last-move").attr("src") == icons.Add
+                && action != "Undo") {
+                $("#last-move").attr("src", card.Image)
+                    .attr("title", action)
+                    .data("id", cardId);
+
+                $(this).data("id", 0);
+                $(this).find("img").attr("src", icons.Undo);
+
+                $(this).attr("title", "Undo")
+                    .attr("position", "last");
+            }
+            else if (action == "Undo") {
+                var position = $(this).attr("position");
+
+                var details = module.getMovesDetails(position);
+
+                $(this).find("img").attr("src", details.Src);
+                $(this).attr("title", details.Title);
+                $(this).data("id", module.getCardBySrc(details.Src).CardId);
+
+                $(this).removeAttr("position");
+            }
+
+            module.checkIfBattleReady();
+        },
+        onViewCards: function () {
+            if ($(this).text() == "View")
+                $(this).text("Hide");
+            else
+                $(this).text("View");
+
+            $("#cards-container").toggleClass("hidden");
+        },
+        setOwnCards: function () {
+            $("#hand-cards-container").html("<h2>Loading Cards</h2>" +
+                "<div class='progress'>" +
+                "<div id='progress-hand-cards' class='progress-bar progress-bar-info' role='progressbar' aria-valuenow='0'" +
+                "aria-valuemin='0' aria-valuemax='100' style='width:0%'>" +
+                "</div>" +
+                "</div>");
+
+            var ownCards = module.getProfile().PlayerHands;
+            var template = "<h2>Action Cards</h2>";
+
+            for (var i = 0; i < ownCards.length; i++) {
+                template += "<button data-id='" + ownCards[i].Id + "' title='" + ownCards[i].Name + "' class='action'><img src='" + ownCards[i].Image + "' /></button>";
+
+                //switch (ownCards[i]) {
+                //    case "Attack": template += "<button title='Attack' class='action'><img src='" + icons.Attack + "' /></button>";
+                //        break;
+                //    case "Defend": template += "<button title='Defend' class='action'><img src='" + icons.Defend + "' /></button>";
+                //        break;
+                //    case "Heal": template += "<button title='Heal' class='action'><img src='" + icons.Heal + "' /></button>";
+                //        break;
+                //    case "Brute Force": template += "<button title='Brute Force' class='action'><img src='" + icons.BruteForce + "' /></button>";
+                //        break;
+                //    default:
+                //}
+            }
+
+            var count = 1;
+            var interval = setInterval(function () {
+                count++;
+
+                $("#progress-hand-cards").attr("aria-valuenow", count * 50);
+                $("#progress-hand-cards").css("width", count * 50 + "%");
+
+                if (count == 3) {
+                    $("#hand-cards-container").html(template);
+                    clearInterval(interval);
+                }
+            }, 1000);
+        },
+        showRoundBattleLog: function (result) {
+            if (result) {
+                if (result == "Win") {
+                    module.battleLogs = "<label class='text-success'><h2>You Win!</h2></label>" + module.battleLogs;
+                }
+                else if (result == "Lose") {
+                    module.battleLogs = "<label class='text-danger'><h2>You Lose!</h2></label>" + module.battleLogs;
+                }
+                else {
+                    module.battleLogs = "<label class='text-info'><h2>Draw!</h2></label>" + module.battleLogs;
+                }
+
+                $("#proceed-battle-container").addClass("hidden");
+            }
+
+            $("#battle-logs-container").prepend(module.battleLogs);
+            module.battleLogs = "";
+
+            if (!result) {
+                module.currentRound++;
+
+                module.gameRound(module.currentRound);
+            }
+        },
+        updateHPBars: function () {
+            var profile = module.getProfile();
+
+            var playerHPPctg = ((profile.PlayerHP / module.maxHP) * 100);
+            var enemyHPPctg = ((profile.EnemyHP / module.maxHP) * 100);
+
+            profile.PlayerHP = profile.PlayerHP > (900 + (profile.Level * 100)) ? 1000 : profile.PlayerHP;
+            profile.EnemyHP = profile.EnemyHP > (900 + (profile.EnemyLevel * 100)) ? 1000 : profile.EnemyHP;
+
+            $("#player-hp").attr("aria-valuenow", profile.PlayerHP)
+                .css("width", playerHPPctg + "%")
+                .html(profile.PlayerHP + "/" + module.maxHP);
+
+            $("#enemy-hp").attr("aria-valuenow", profile.EnemyHP)
+                .css("width", enemyHPPctg + "%")
+                .html(profile.EnemyHP + "/" + + module.maxHP);;
+
+            if (playerHPPctg <= 50 && playerHPPctg > 30) {
+                $("#player-hp").removeClass("progress-bar-success")
+                    .removeClass("progress-bar-danger")
+                    .addClass("progress-bar-warning");
+            }
+            else if (playerHPPctg <= 30) {
+                $("#player-hp").removeClass("progress-bar-warning")
+                    .removeClass("progress-bar-success")
+                    .addClass("progress-bar-danger");
+            }
+            else {
+                $("#player-hp").removeClass("progress-bar-warning")
+                    .removeClass("progress-bar-danger")
+                    .addClass("progress-bar-success");
+            }
+
+            if (enemyHPPctg <= 50 && enemyHPPctg > 30) {
+                $("#enemy-hp").removeClass("progress-bar-success")
+                    .removeClass("progress-bar-danger")
+                    .addClass("progress-bar-warning");
+            }
+            else if (enemyHPPctg <= 30) {
+                $("#enemy-hp").removeClass("progress-bar-warning")
+                    .removeClass("progress-bar-success")
+                    .addClass("progress-bar-danger");
+            }
+            else {
+                $("#enemy-hp").removeClass("progress-bar-warning")
+                    .removeClass("progress-bar-danger")
+                    .addClass("progress-bar-success");
+            }
+        }
+    };
+
+    $(window).on("load", module.onLoad);
+</script>
