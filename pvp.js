@@ -7,12 +7,12 @@ let pvpModule = {
 
         pvpModule.client.on("message", (topic, payload) => {
             try {
+                message = JSON.parse(payload);
                 if (topic.includes('addEditProfile')) { 
-                    message = JSON.parse(payload);
                     options.addEditProfile(message);
                 }
-                else if (topic.includes('combatStatus')) {
-                    options.getMoveResult();
+                else if (topic.includes('getMoveResult')) {
+                    options.getMoveResult(message);
                 }
             }
             catch(err) {
@@ -24,18 +24,18 @@ let pvpModule = {
     },
     joinRoom: (room) => {
         pvpModule.client.subscribe('nft-poc-game/rooms/' + room + '/addEditProfile');
-        pvpModule.client.subscribe('nft-poc-game/rooms/' + room + '/combatStatus');
+        pvpModule.client.subscribe('nft-poc-game/rooms/' + room + '/getMoveResult');
         pvpModule.roomid = room;
     },
     leaveroom: (room) => {
         pvpModule.client.unsubscribe('nft-poc-game/rooms/' + room + '/addEditProfile');
-        pvpModule.client.unsubscribe('nft-poc-game/rooms/' + room + '/combatStatus');
+        pvpModule.client.unsubscribe('nft-poc-game/rooms/' + room + '/getMoveResult');
         pvpModule.roomid = null;
     },
     addEditProfile: (profile) => {
         pvpModule.client.publish('nft-poc-game/rooms/' + pvpModule.roomid + '/addEditProfile', JSON.stringify(profile));
     },
-    getMoveResult: () => {
-        pvpModule.client.publish('nft-poc-game/rooms/' + pvpModule.roomid + '/combatStatus', '');
+    getMoveResult: (moves) => {
+        pvpModule.client.publish('nft-poc-game/rooms/' + pvpModule.roomid + '/getMoveResult', JSON.stringify(moves));
     }
 }
