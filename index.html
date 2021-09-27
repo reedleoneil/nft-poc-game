@@ -816,9 +816,7 @@
         addEditProfile: function (data) {
             module.profile = data;
             localStorage.setItem("Profile", JSON.stringify(module.profile));
-            
-            if (module.pvp)
-                pvpModule.addEditProfile(data);
+        
         },
         addHP: function (isPlayer, currentHP, heal, bonus) {
             if (bonus) {
@@ -2233,7 +2231,8 @@
             else {
                 $("#btn-confirm").prop( "disabled", true);
                 $("#btn-confirm").html("Waiting For Enemy Attack");
-                pvpModule.getMoveResult(); 
+                pvpModule.addEditProfile(profile);
+                pvpModule.getMoveResult(module.getMovesDetails('all'));
             }
                               
         },
@@ -2422,7 +2421,7 @@
         }
     };
 
-    pvpModule.joinRoom(1); //default room id for testing
+    pvpModule.joinRoom(2); //default room id for testing
     pvpOptions = {
         addEditProfile: (payload) => {
             var profile = module.getProfile();
@@ -2447,14 +2446,22 @@
                 localStorage.setItem("Profile", JSON.stringify(module.profile));
             }
         },
-        getMoveResult: () => {
+        getMoveResult: (moves) => {
             pvpModule.combatStatus++;
             console.log("combat status: " + pvpModule.combatStatus)
 
+            console.log(moves);
+            if (JSON.stringify(moves) != JSON.stringify(module.getMovesDetails('all')))
+                localStorage.setItem('EnemyMoves', JSON.stringify(moves));
+
             if (pvpModule.combatStatus == 2) {
                 pvpModule.combatStatus = 0;
-                var profile = module.getProfile();
-                module.getMoveResult(1, profile.EnemyUsedCards);
+                enemyMovesCard = JSON.parse(localStorage.getItem('EnemyMoves'));
+                enemyMoves = [];
+                enemyMoves[0] = module.getCardDeckById(enemyMovesCard.FirstId);
+                enemyMoves[1] = module.getCardDeckById(enemyMovesCard.SecondId);
+                enemyMoves[2] = module.getCardDeckById(enemyMovesCard.LastId);
+                module.getMoveResult(1, enemyMoves);
                 $("#btn-confirm").prop( "disabled", false);
                 $("#btn-confirm").html("Proceed Battle!");
             }
