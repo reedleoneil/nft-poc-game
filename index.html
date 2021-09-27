@@ -2189,9 +2189,12 @@
             module.gameRound(module.currentRound);
         },
         onPVP: function () {
-            //to do:
-            module.onBattle(); // for testing
+            pvpModule.joinRoom(prompt("Please enter room id"));
+            
+            module.onBattle();
             module.pvp = true;
+
+            $("#enemy-name-label").text("Waitings for Enemy to Join...");
         },
         onConfirmBattle: function () {
             var profile = module.getProfile();
@@ -2421,8 +2424,8 @@
         }
     };
 
-    pvpModule.joinRoom(2); //default room id for testing
     pvpOptions = {
+        playerName: JSON.parse(localStorage.getItem("Profile")).Name,
         addEditProfile: (payload) => {
             var profile = module.getProfile();
 
@@ -2433,18 +2436,15 @@
                 profile.PlayerHP = payload.PlayerHP;
                 profile.PlayerHands = payload.PlayerHands;
                 profile.PlayerUsedCards = payload.PlayerUsedCards;
-                
-                module.profile = profile;
-                localStorage.setItem("Profile", JSON.stringify(module.profile));
             } else {
                 profile.EnemyCards = payload.PlayerCards;
                 profile.EnemyHP = payload.PlayerHP;
                 profile.EnemyHands = payload.PlayerHands;
                 profile.EnemyUsedCards = payload.PlayerUsedCards;    
-                
-                module.profile = profile;
-                localStorage.setItem("Profile", JSON.stringify(module.profile));
             }
+
+            module.profile = profile;
+            localStorage.setItem("Profile", JSON.stringify(module.profile));
         },
         getMoveResult: (moves) => {
             pvpModule.combatStatus++;
@@ -2464,6 +2464,14 @@
                 module.getMoveResult(1, enemyMoves);
                 $("#btn-confirm").prop( "disabled", false);
                 $("#btn-confirm").html("Proceed Battle!");
+            }
+        },
+        onJoin: (name) => {
+            console.log(name);
+            if (name.Name != JSON.parse(localStorage.getItem("Profile")).Name) {
+                $("#enemy-name-label").text(name.Name);
+                alert("The Battle Begins");
+                pvpModule.onJoin();
             }
         }
     };
