@@ -1,3 +1,51 @@
+<style>
+    .body-content {
+        padding-top: 50px;
+    }
+
+    .img-avatar {
+        height: 150px;
+        width: 150px;
+    }
+
+    .type-label {
+        vertical-align: middle !important;
+        text-align: center;
+        font-size: 30px;
+    }
+
+    button.action {
+        margin: 10px;
+    }
+
+        button.action img {
+            height: 120px;
+            width: 120px;
+        }
+
+    .action {
+        height: 150px;
+        width: 150px;
+    }
+
+    .progress {
+        height: 20px;
+        font-size: 18px;
+    }
+
+    .progress-bar-success {
+        background-color: #5cb85c;
+    }
+
+    .progress-bar-warning {
+        background-color: #f0ad4e;
+    }
+
+    .progress-bar-danger {
+        background-color: #d9534f;
+    }
+</style>
+
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -176,9 +224,9 @@
                     <td class="col-lg-5 text-center">
                         <h2 id="enemy-name-label">Fluff Monster</h2>
                         <div class="progress margin-md-bottom">
-                            <div id="enemy-hp" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1000"
-                                 aria-valuemin="0" aria-valuemax="1000" style="width:100%">
-                                1000/1000
+                            <div id="enemy-hp" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1500"
+                                 aria-valuemin="0" aria-valuemax="1500" style="width:100%">
+                                1500/1500
                             </div>
                         </div>
                         <img class="img-avatar" id="enemy-image" src="" />
@@ -232,54 +280,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-<style>
-    .body-content {
-        padding-top: 50px;
-    }
-
-    .img-avatar {
-        height: 150px;
-        width: 150px;
-    }
-
-    .type-label {
-        vertical-align: middle !important;
-        text-align: center;
-        font-size: 30px;
-    }
-
-    button.action {
-        margin: 10px;
-    }
-
-        button.action img {
-            height: 120px;
-            width: 120px;
-        }
-
-    .action {
-        height: 150px;
-        width: 150px;
-    }
-
-    .progress {
-        height: 20px;
-        font-size: 18px;
-    }
-
-    .progress-bar-success {
-        background-color: #5cb85c;
-    }
-
-    .progress-bar-warning {
-        background-color: #f0ad4e;
-    }
-
-    .progress-bar-danger {
-        background-color: #d9534f;
-    }
-</style>
-
 <script>
     var terms = {
         Cards: {
@@ -313,6 +313,7 @@
         battleLogs: "",
         currentRound: 1,
         maxHP: 900 + ((localStorage.getItem("Profile") ? JSON.parse(localStorage.getItem("Profile")).Level : 1) * 100),
+        enemyMaxHP: 1500,
         cards: [
             {
                 CardId: 1,
@@ -810,7 +811,7 @@
             module.profile = data;
             localStorage.setItem("Profile", JSON.stringify(module.profile));
         },
-        addHP: function (currentHP, heal, bonus) {
+        addHP: function (isPlayer, currentHP, heal, bonus) {
             if (bonus) {
                 if (bonus < 1)
                     heal += Math.round(heal * bonus);
@@ -818,18 +819,18 @@
                     heal += bonus;
             }
 
-            if ((currentHP + heal) > module.maxHP)
-                return module.maxHP;
+            if ((currentHP + heal) > (isPlayer ? module.maxHP : module.enemyMaxHP))
+                return (isPlayer ? module.maxHP : module.enemyMaxHP);
             else
                 return Math.round(currentHP + heal);
         },
-        deductHP: function (currentHP, damage, reduction) {
+        deductHP: function (isPlayer, currentHP, damage, reduction) {
             if (reduction) {
                 damage -= Math.round(damage * reduction);
             }
 
-            if ((currentHP - damage) > module.maxHP)
-                return module.maxHP;
+            if ((currentHP - damage) > (isPlayer ? module.maxHP : module.enemyMaxHP))
+                return (isPlayer ? module.maxHP : module.enemyMaxHP);
             else {
                 return Math.round(currentHP - damage);
             }
@@ -1192,66 +1193,66 @@
         getHPCalculation: function (profile, playerMove, enemyMove) {
             if (playerMove.Name == terms.Cards.SwordSlash) {
                 if (enemyMove.Name == terms.Cards.SwordSlash) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.BattleAxe) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Penalty, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.ArrowShot) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.AssassinDagger) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MightyShield) {
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.HolyShield) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect));
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect));
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.DefendAndCounter) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
@@ -1259,115 +1260,115 @@
                 else if (enemyMove.Name == terms.Cards.MagicHeal) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.SecretHerb) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal2);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal2);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.MercyHeal) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, enemyMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, false);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
             }
             else if (playerMove.Name == terms.Cards.BattleAxe) {
                 if (enemyMove.Name == terms.Cards.SwordSlash) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, playerMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Penalty, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);                    
                 }
                 else if (enemyMove.Name == terms.Cards.BattleAxe) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, playerMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Penalty, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Penalty, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.ArrowShot) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, playerMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Penalty, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.AssassinDagger) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, playerMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Penalty, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MightyShield) {
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield * playerMove.Shield);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage, enemyMove.Shield * playerMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, playerMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Penalty, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.HolyShield) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect));
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect));
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, playerMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Penalty, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.DefendAndCounter) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, playerMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Penalty, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield / playerMove.Shield);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage, enemyMove.Shield / playerMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
@@ -1375,106 +1376,106 @@
                 else if (enemyMove.Name == terms.Cards.MagicHeal) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, playerMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Penalty, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.SecretHerb) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, playerMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Penalty, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal2);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal2);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.MercyHeal) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, playerMove.HPPenalTy);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, playerMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Penalty, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, enemyMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, false);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
             }
             else if (playerMove.Name == terms.Cards.ArrowShot) {
                 if (enemyMove.Name == terms.Cards.SwordSlash) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.BattleAxe) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Penalty, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.ArrowShot) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.AssassinDagger) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MightyShield) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage2, enemyMove.Shield);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage2, enemyMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.HolyShield) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, Math.round(playerMove.Damage2 * enemyMove.Reflect));
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, Math.round(playerMove.Damage2 * enemyMove.Reflect));
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage2, enemyMove.Shield);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage2, enemyMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.DefendAndCounter) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage2, enemyMove.Shield);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage2, enemyMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
@@ -1482,137 +1483,143 @@
                 else if (enemyMove.Name == terms.Cards.MagicHeal) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage2);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage2);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.SecretHerb) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage2);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage2);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal2);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal2);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.MercyHeal) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, enemyMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, false);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage2);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage2);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
             }
             else if (playerMove.Name == terms.Cards.AssassinDagger) {
                 if (enemyMove.Name == terms.Cards.SwordSlash) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.BattleAxe) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Penalty, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.ArrowShot) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.AssassinDagger) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MightyShield) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.HolyShield) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect));
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect));
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.DefendAndCounter) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MagicHeal) {
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.SecretHerb) {
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
+
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MercyHeal) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
             }
             else if (playerMove.Name == terms.Cards.MightyShield) {
                 if (enemyMove.Name == terms.Cards.SwordSlash) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage, playerMove.Shield);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage, playerMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.BattleAxe) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage, (playerMove.Shield * enemyMove.Shield));
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage, (playerMove.Shield * enemyMove.Shield));
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Penalty, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.ArrowShot) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage2, playerMove.Shield);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage2, playerMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.AssassinDagger) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
@@ -1628,7 +1635,7 @@
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.DefendAndCounter) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage, playerMove.Shield);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage, playerMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
@@ -1638,60 +1645,60 @@
                 else if (enemyMove.Name == terms.Cards.MagicHeal) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.SecretHerb) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.MercyHeal) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, enemyMove.EnemyHeal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                 }
             }
             else if (playerMove.Name == terms.Cards.HolyShield) {
                 if (enemyMove.Name == terms.Cards.SwordSlash) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage, playerMove.Shield);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage, playerMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.Damage * playerMove.Reflect);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.Damage * playerMove.Reflect);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.BattleAxe) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage, playerMove.Shield * enemyMove.Shield);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage, playerMove.Shield * enemyMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.Damage * playerMove.Reflect);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.Damage * playerMove.Reflect);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Penalty, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.ArrowShot) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage2, playerMove.Shield);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage2, playerMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.Damage2 * playerMove.Reflect);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.Damage2 * playerMove.Reflect);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.AssassinDagger) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.Damage * playerMove.Reflect);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.Damage * playerMove.Reflect);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
@@ -1706,7 +1713,7 @@
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.DefendAndCounter) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
@@ -1716,87 +1723,88 @@
                 else if (enemyMove.Name == terms.Cards.MagicHeal) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal, playerMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal, playerMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.SecretHerb) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal, playerMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.MercyHeal) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, enemyMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, false);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal, playerMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
             }
             else if (playerMove.Name == terms.Cards.DefendAndCounter) {
                 if (enemyMove.Name == terms.Cards.SwordSlash) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage, playerMove.Shield);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage, playerMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.BattleAxe) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Penalty, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.ArrowShot) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage2, playerMove.Shield);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage2, playerMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.AssassinDagger) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MightyShield) {
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.HolyShield) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect), playerMove.Shield);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect), playerMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.DefendAndCounter) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage, playerMove.Shield);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage, playerMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
@@ -1805,294 +1813,294 @@
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.SecretHerb) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.MercyHeal) {
-                    profile.PlayerHP = module.addHP(profile.EnemyHP, enemyMove.EnemyHeal);
+                    profile.PlayerHP = module.addHP(false, profile.EnemyHP, enemyMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, false);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, playerMove.Damage);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
             }
             else if (playerMove.Name == terms.Cards.MagicHeal) {
                 if (enemyMove.Name == terms.Cards.SwordSlash) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.BattleAxe) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Penalty, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.ArrowShot) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage2);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage2);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
                 }
                 else if (enemyMove.Name == terms.Cards.AssassinDagger) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.deductHP(enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MightyShield) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.HolyShield) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal, enemyMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.DefendAndCounter) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MagicHeal) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.SecretHerb) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal2);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal2);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.MercyHeal) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, enemyMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, false);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
             }
             else if (playerMove.Name == terms.Cards.SecretHerb) {
                 if (enemyMove.Name == terms.Cards.SwordSlash) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal2);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal2);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.BattleAxe) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal2);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal2);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Penalty, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.ArrowShot) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage2);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage2);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal2);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal2);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.AssassinDagger) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MightyShield) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.HolyShield) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal, enemyMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.DefendAndCounter) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MagicHeal) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal2);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal2);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.SecretHerb) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal2);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal2);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal2);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal2);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
                 else if (enemyMove.Name == terms.Cards.MercyHeal) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal2);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal2);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, enemyMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, false);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                 }
             }
             else if (playerMove.Name == terms.Cards.MercyHeal) {
                 if (enemyMove.Name == terms.Cards.SwordSlash) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, playerMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, true);
                 }
                 else if (enemyMove.Name == terms.Cards.BattleAxe) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, playerMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, true);
 
-                    profile.EnemyHP = module.deductHP(profile.EnemyHP, enemyMove.HPPenalTy);
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, enemyMove.HPPenalTy);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Penalty, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.ArrowShot) {
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage2);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage2);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, playerMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, true);
                 }
                 else if (enemyMove.Name == terms.Cards.AssassinDagger) {
-                    profile.PlayerHP = module.deductHP(enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MightyShield) {
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, playerMove.EnemyHeal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                 }
                 else if (enemyMove.Name == terms.Cards.HolyShield) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal, enemyMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, playerMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, true);
                 }
                 else if (enemyMove.Name == terms.Cards.DefendAndCounter) {
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, playerMove.EnemyHeal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
 
-                    profile.PlayerHP = module.deductHP(profile.PlayerHP, enemyMove.Damage);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
                 }
                 else if (enemyMove.Name == terms.Cards.MagicHeal) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, playerMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, true);
                 }
                 else if (enemyMove.Name == terms.Cards.SecretHerb) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal2);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal2);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, playerMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, true);
                 }
                 else if (enemyMove.Name == terms.Cards.MercyHeal) {
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, playerMove.Heal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
 
-                    profile.PlayerHP = module.addHP(profile.PlayerHP, enemyMove.EnemyHeal);
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, enemyMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, false);
 
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, enemyMove.Heal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, enemyMove.Heal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, false);
                     
-                    profile.EnemyHP = module.addHP(profile.EnemyHP, playerMove.EnemyHeal);
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, playerMove.EnemyHeal);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, true);
                 }
             }
@@ -2161,7 +2169,7 @@
             $("#enemy-image").attr("src", monster.Image);
 
             profile.PlayerHP = module.maxHP;
-            profile.EnemyHP = module.maxHP;
+            profile.EnemyHP = module.enemyMaxHP;
             profile.PlayerCards = JSON.parse(localStorage.getItem("CardDeck"));
             profile.EnemyCards = JSON.parse(localStorage.getItem("CardDeck"));;
             profile.PlayerHands = [];
@@ -2344,10 +2352,11 @@
             var profile = module.getProfile();
 
             var playerHPPctg = ((profile.PlayerHP / module.maxHP) * 100);
-            var enemyHPPctg = ((profile.EnemyHP / module.maxHP) * 100);
+            //var enemyHPPctg = ((profile.EnemyHP / module.maxHP) * 100);
+            var enemyHPPctg = ((profile.EnemyHP / module.enemyMaxHP) * 100);
 
             profile.PlayerHP = profile.PlayerHP > (900 + (profile.Level * 100)) ? 1000 : profile.PlayerHP;
-            profile.EnemyHP = profile.EnemyHP > (900 + (profile.EnemyLevel * 100)) ? 1000 : profile.EnemyHP;
+            profile.EnemyHP = profile.EnemyHP > (1400 + (profile.EnemyLevel * 100)) ? 1500 : profile.EnemyHP;
 
             $("#player-hp").attr("aria-valuenow", profile.PlayerHP)
                 .css("width", playerHPPctg + "%")
@@ -2355,7 +2364,8 @@
 
             $("#enemy-hp").attr("aria-valuenow", profile.EnemyHP)
                 .css("width", enemyHPPctg + "%")
-                .html(profile.EnemyHP + "/" + + module.maxHP);;
+                //.html(profile.EnemyHP + "/" + + module.maxHP);
+                .html(profile.EnemyHP + "/" + + module.enemyMaxHP);
 
             if (playerHPPctg <= 50 && playerHPPctg > 30) {
                 $("#player-hp").removeClass("progress-bar-success")
