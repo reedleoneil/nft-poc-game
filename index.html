@@ -96,7 +96,7 @@
                         </td>
                         <td>
                             <button id="btn-battle" class="btn btn-default">Battle!</button>
-                            <button class="btn btn-default">PVP</button>
+                            <button id="btn-pvp" class="btn btn-default">PVP</button>
                             <button class="btn btn-default">Market</button>
                             <button class="btn btn-default">Battle Logs</button>
                         </td>
@@ -280,6 +280,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+<!-- PVP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.2.6/mqtt.min.js" integrity="sha512-DD/bXhp28PWFubyhBKR7vt5FUMRCbEJ8KtC4Oq/MTWniMUytsPM5pFDaUTaHDRd7zC8cHpKvv6FaUI2OP/czlw==" crossorigin="anonymous"></script>
+<script src="pvp.js"></script>
+
 <script>
     var terms = {
         Cards: {
@@ -314,6 +318,7 @@
         currentRound: 1,
         maxHP: 900 + ((localStorage.getItem("Profile") ? JSON.parse(localStorage.getItem("Profile")).Level : 1) * 100),
         enemyMaxHP: 1500,
+        pvp: true,
         cards: [
             {
                 CardId: 1,
@@ -802,6 +807,7 @@
         ],
         attachEvents: function () {
             $("#btn-battle").on("click", module.onBattle);
+            $("#btn-pvp").on("click", module.onPVP);
             $("#btn-save-player").on("click", module.onSavePlayer);
             $("#btn-view-cards").on("click", module.onViewCards);
             $("body").delegate("button.action", "click", module.onSelectAction);
@@ -810,6 +816,9 @@
         addEditProfile: function (data) {
             module.profile = data;
             localStorage.setItem("Profile", JSON.stringify(module.profile));
+            
+            if (module.pvp)
+                pvpModule.addEditProfile(data);
         },
         addHP: function (isPlayer, currentHP, heal, bonus) {
             if (bonus) {
@@ -2181,6 +2190,11 @@
 
             module.gameRound(module.currentRound);
         },
+        onPVP: function () {
+            //to do:
+            module.onBattle(); // for testing
+            module.pvp = true;
+        },
         onConfirmBattle: function () {
             var profile = module.getProfile();
 
@@ -2214,7 +2228,14 @@
 
             module.battleLogs += "<h3>Round " + module.currentRound + "</h3>";
 
-            module.getMoveResult(1, enemyActions);
+            if (!module.pvp)
+                module.getMoveResult(1, enemyActions);
+            else {
+                $("#btn-confirm").prop( "disabled", true);
+                $("#btn-confirm").html("Waiting For Enemy Attack");
+                pvpModule.getMoveResult(); 
+            }
+                              
         },
         onSavePlayer: function () {
             module.addEditProfile({ Name: $("#txt-player-name").val() });
@@ -2401,5 +2422,45 @@
         }
     };
 
+    pvpModule.joinRoom(1); //default room id for testing
+    pvpOptions = {
+        addEditProfile: (payload) => {
+            var profile = module.getProfile();
+
+            console.log(payload);
+
+            if (profile.Name == payload.Name) {
+                profile.PlayerCards = payload.PlayerCards;
+                profile.PlayerHP = payload.PlayerHP;
+                profile.PlayerHands = payload.PlayerHands;
+                profile.PlayerUsedCards = payload.PlayerUsedCards;
+                
+                module.profile = profile;
+                localStorage.setItem("Profile", JSON.stringify(module.profile));
+            } else {
+                profile.EnemyCards = payload.PlayerCards;
+                profile.EnemyHP = payload.PlayerHP;
+                profile.EnemyHands = payload.PlayerHands;
+                profile.EnemyUsedCards = payload.PlayerUsedCards;    
+                
+                module.profile = profile;
+                localStorage.setItem("Profile", JSON.stringify(module.profile));
+            }
+        },
+        getMoveResult: () => {
+            pvpModule.combatStatus++;
+            console.log("combat status: " + pvpModule.combatStatus)
+
+            if (pvpModule.combatStatus == 2) {
+                pvpModule.combatStatus = 0;
+                var profile = module.getProfile();
+                module.getMoveResult(1, profile.EnemyUsedCards);
+                $("#btn-confirm").prop( "disabled", false);
+                $("#btn-confirm").html("Proceed Battle!");
+            }
+        }
+    };
+
     $(window).on("load", module.onLoad);
+    $(window).on("load", pvpModule.onLoad(pvpOptions));
 </script>
