@@ -1,8 +1,4 @@
-﻿@{
-    Layout = null;
-}
-
-<style>
+﻿<style>
     .body-content {
         padding-top: 50px;
     }
@@ -58,7 +54,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/" class="navbar-brand">All Fight Game</a>
+            <a id="home-nav" href="" class="navbar-brand">All Fight Game</a>
         </div>
         <div class="navbar-collapse collapse">
         </div>
@@ -100,9 +96,9 @@
                         </td>
                         <td>
                             <button id="btn-battle" class="btn btn-default">Battle!</button>
-                            <button id="btn-pvp" class="btn btn-default">PVP</button>
+                            <button class="btn btn-default">PVP</button>
                             <button class="btn btn-default">Market</button>
-                            <button class="btn btn-default">Battle Logs</button>
+                            <button id="btn-reset-account" class="btn btn-default">Reset Account</button>
                         </td>
                     </tr>
                 </tbody>
@@ -166,7 +162,7 @@
                         </td>
                         <td class="type-label">DEFENSE</td>
                         <td class="h4">
-                            Block 40% damage and deflects 20% damage back to the enemy if they play an <strong>Attack Card</strong>. Enemy will receive 40% more healing if they play a <strong>Support Card</strong>.
+                            Block 40% damage and deflect 20% damage back to the enemy if they deal damage to you. Enemy will receive 40% more healing if they play a <strong>Support Card</strong>.
                         </td>
                     </tr>
                     <tr>
@@ -216,10 +212,10 @@
                 <tr>
                     <td class="col-lg-5 text-center">
                         <h2 class="player-name"></h2>
+                        <h4 id="player-hp-label"><strong>(1000/1000 HP)</strong></h4>
                         <div class="progress margin-md-bottom">
                             <div id="player-hp" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1000"
                                  aria-valuemin="0" aria-valuemax="1000" style="width:100%">
-                                1000/1000
                             </div>
                         </div>
                         <img class="img-avatar" src="https://cdn-icons-png.flaticon.com/512/4352/4352135.png" />
@@ -227,10 +223,10 @@
                     <td class="col-lg-2 text-center"><h1>VS.</h1></td>
                     <td class="col-lg-5 text-center">
                         <h2 id="enemy-name-label">Fluff Monster</h2>
+                        <h4 id="enemy-hp-label"><strong>(1000/1000 HP)</strong></h4>
                         <div class="progress margin-md-bottom">
                             <div id="enemy-hp" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1500"
                                  aria-valuemin="0" aria-valuemax="1500" style="width:100%">
-                                1500/1500
                             </div>
                         </div>
                         <img class="img-avatar" id="enemy-image" src="" />
@@ -266,6 +262,108 @@
                 <tr class="row text-center">
                     <td class="col-lg-12" id="hand-cards-container"></td>
                 </tr>
+                <tr class="row">
+                    <td>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            Read Card Descriptions
+                        </button>
+                        <div class="collapse" id="collapseExample">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="text-center">
+                                        <td class="col-lg-4"><label>CARD NAME</label></td>
+                                        <td class="col-lg-2"><label>CARD TYPE</label></td>
+                                        <td class="col-lg-6"><label>EFFECT</label></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center">
+                                            <h2>Sword Slash</h2>
+                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/4334/4334081.png" />
+                                        </td>
+                                        <td class="type-label">ATTACK</td>
+                                        <td class="h4">Deal 100 damage to the enemy.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">
+                                            <h2>Battle Axe</h2>
+                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/1825/1825371.png" />
+                                        </td>
+                                        <td class="type-label">ATTACK</td>
+                                        <td class="h4">Deal 130 damage to the enemy then inflict 20 damage to own HP after. Reduce damage reduction by 50% when enemy uses a <strong>Defense Card</strong>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">
+                                            <h2>Arrow Shot</h2>
+                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/625/625445.png" />
+                                        </td>
+                                        <td class="type-label">ATTACK</td>
+                                        <td class="h4">Deal 120 damage to the enemy if they play an <strong>Attack Card</strong> and only deal 80 damage if they play a <strong>Non-Attack Card (Defense/Support)</strong>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">
+                                            <h2>Assassin Dagger</h2>
+                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/5574/5574134.png" />
+                                        </td>
+                                        <td class="type-label">ATTACK</td>
+                                        <td class="h4">Deal 60 damage to the enemy. Ignore 100% damage reduction from <strong>Defense Cards</strong> except <strong>Holy Shield</strong> and disable healing effect from <strong>Support Cards</strong> when played by your enemy.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">
+                                            <h2>Mighty Shield</h2>
+                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/929/929429.png" />
+                                        </td>
+                                        <td class="type-label">DEFENSE</td>
+                                        <td class="h4">Block 60% damage from the enemy.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">
+                                            <h2>Holy Shield</h2>
+                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/1044/1044007.png" />
+                                        </td>
+                                        <td class="type-label">DEFENSE</td>
+                                        <td class="h4">
+                                            Block 40% damage and deflect 20% damage back to the enemy if they deal damage to you. Enemy will receive 40% more healing if they play a <strong>Support Card</strong>.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">
+                                            <h2>Defend and Counter</h2>
+                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/602/602048.png" />
+                                        </td>
+                                        <td class="type-label">DEFENSE</td>
+                                        <td class="h4">Blocks 30% damage from the enemy then deal 40 damage to them.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">
+                                            <h2>Magic Heal</h2>
+                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/693/693337.png" />
+                                        </td>
+                                        <td class="type-label">SUPPORT</td>
+                                        <td class="h4">Restore 50 HP</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">
+                                            <h2>Secret Herb</h2>
+                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/2917/2917995.png" />
+                                        </td>
+                                        <td class="type-label">SUPPORT</td>
+                                        <td class="h4">Restore 90 HP when enemy plays a <strong>Defense Card</strong> and restore only 30 HP when enemy plays a <strong>Non-Defense Card (Attack/Support)</strong>.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">
+                                            <h2>Mercy Heal</h2>
+                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/1721/1721167.png" />
+                                        </td>
+                                        <td class="type-label">SUPPORT</td>
+                                        <td class="h4">Restore 70 HP then restore 20 enemy HP.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>                    
+                </tr>
                 <tr>
                     <td id="battle-logs-container" colspan="3"></td>
                 </tr>
@@ -285,10 +383,6 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-<!-- PVP -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.2.6/mqtt.min.js" integrity="sha512-DD/bXhp28PWFubyhBKR7vt5FUMRCbEJ8KtC4Oq/MTWniMUytsPM5pFDaUTaHDRd7zC8cHpKvv6FaUI2OP/czlw==" crossorigin="anonymous"></script>
-<script src="pvp.js"></script>
 
 <script>
     var terms = {
@@ -321,8 +415,8 @@
     var module = {
         profile: {},
         battleLogs: "",
+        status: "",
         currentRound: 1,
-        pvp: false,
         maxHP: function () {
             return 900 + ((localStorage.getItem("Profile") ? JSON.parse(localStorage.getItem("Profile")).Level : 1) * 100);
         },
@@ -827,13 +921,13 @@
         ],
         attachEvents: function () {
             $("#btn-battle").on("click", module.onBattle);
-            $("#btn-pvp").on("click", module.onPVP);
             $("#btn-save-player").on("click", module.onSavePlayer);
             $("#btn-view-cards").on("click", module.onViewCards);
             $("body").delegate("button.action", "click", module.onSelectAction);
             $("#btn-confirm").on("click", module.onConfirmBattle);
             $("#btn-next-boss").on("click", module.onBattleNextBoss);
             $("#btn-battle-again").on("click", module.onBattleAgain);
+            $("#btn-reset-account").on("click", module.onResetAccount);
         },
         addEditProfile: function (data) {
             module.profile = data;
@@ -864,28 +958,30 @@
             }
         },
         checkIfBattleReady: function () {
-            if ($("img[src='" + module.getIcons().Add + "']").length == 0) {
-                $("#proceed-battle-container").removeClass("hidden");
-                $("#btn-confirm").removeClass("hidden");
-            }
-            else {
-                $("#proceed-battle-container").addClass("hidden");
-                $("#btn-confirm").addClass("hidden");
+            if (module.status == "") {
+                if ($("img[src='" + module.getIcons().Add + "']").length == 0) {
+                    $("#proceed-battle-container").removeClass("hidden");
+                    $("#btn-confirm").removeClass("hidden");
+                }
+                else {
+                    $("#proceed-battle-container").addClass("hidden");
+                    $("#btn-confirm").addClass("hidden");
+                }
             }
         },
         checkWinner: function (movePosition, data) {
             var profile = module.getProfile();
 
             if (profile.PlayerHP <= 0 && profile.EnemyHP <= 0) {
-                alert("Draw!");
+                //alert("Draw!");
                 module.showRoundBattleLog("Draw");
             }
             else if (profile.EnemyHP <= 0) {
-                alert("You Win!");
+                //alert("You Win!");
                 module.showRoundBattleLog("Win");
             }
             else if (profile.PlayerHP <= 0) {
-                alert("You Lose!");
+                //alert("You Lose!");
                 module.showRoundBattleLog("Lose");
             }
             else {
@@ -1070,7 +1166,10 @@
                             }
                         }
                     case terms.Actions.Took:
-                        if (playerMove.Type == terms.Types.Defense && enemyMove.Name == terms.Cards.BattleAxe) {
+                        if (enemyMove.Name == terms.Cards.HolyShield && playerMove.Name == terms.Cards.DefendAndCounter) {
+                            return "You took <label class='text-danger'>" + Math.round(playerMove.Damage * enemyMove.Reflect) + "</label> damage from <strong>" + enemyMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
+                        }
+                        else if (playerMove.Type == terms.Types.Defense && enemyMove.Name == terms.Cards.BattleAxe) {
                             return "You took <label class='text-danger'>" + (enemyMove.Damage - Math.round(enemyMove.Damage * (playerMove.Shield * enemyMove.Shield))) + "</label> damage from <strong>" + enemyMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
                         }
                         else if (playerMove.Type == terms.Types.Attack && enemyMove.Name == terms.Cards.HolyShield) {
@@ -1101,8 +1200,6 @@
                     case terms.Actions.Penalty:
                         return "You took <label class='text-danger'>" + playerMove.HPPenalTy + "</label> damage from the <strong>" + playerMove.Name + "</strong> penalty effect (" + profile.PlayerHP + ").<br/>";
                     case terms.Actions.Block:
-                        console.log(playerMove);
-                        console.log(enemyMove);
                         if ((playerMove.Name != terms.Cards.DefendAndCounter
                             && !enemyMove.Damage && !playerMove.Damage2)
                             || playerMove.Name == terms.Cards.DefendAndCounter
@@ -1122,6 +1219,9 @@
                             return "You blocked incoming <label class='text-info'>" + Math.round(enemyMove.Damage * playerMove.Shield) + "</label> damage using <strong>" + playerMove.Name + "</strong>.<br/>";
                         }
                     case terms.Actions.Heal:
+                        if (!isPlayerHeal) {
+                            return "You restored <label class='text-success'>" + enemyMove.EnemyHeal + "</label> HP from enemy card <strong>" + enemyMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
+                        }
                         if (enemyMove.Name == terms.Cards.HolyShield) {
                             return "You restored <label class='text-success'>" + (playerMove.Heal + Math.round((playerMove.Heal * enemyMove.Heal))) + "</label> HP using <strong>" + playerMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
                         }
@@ -1129,12 +1229,7 @@
                             return "You restored <label class='text-success'>" + playerMove.Heal2 + "</label> HP using <strong>" + playerMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
                         }
                         else {
-                            if (isPlayerHeal) {
-                                return "You restored <label class='text-success'>" + playerMove.Heal + "</label> HP using <strong>" + playerMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
-                            }
-                            else {
-                                return "You restored <label class='text-success'>" + enemyMove.EnemyHeal + "</label> HP from enemy card <strong>" + enemyMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
-                            }
+                            return "You restored <label class='text-success'>" + playerMove.Heal + "</label> HP using <strong>" + playerMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
                         }
                 }
             }
@@ -1181,8 +1276,11 @@
                             }
                         }
                     case terms.Actions.Took:
-                        if (enemyMove.Type == terms.Types.Defense && playerMove.Name == terms.Cards.BattleAxe) {
-                            return "Enemy took <label class='text-danger'>" + (playerMove.Damage - Math.round(playerMove.Damage * (enemyMove.Shield * playerMove.Shield))) + "</label> damage from <strong>" + playerMove.Name + "</strong> (" + profile.PlayerHP + ").<br/>";
+                        if (playerMove.Name == terms.Cards.HolyShield && enemyMove.Name == terms.Cards.DefendAndCounter) {
+                            return "Enemy took <label class='text-danger'>" + Math.round(enemyMove.Damage * playerMove.Reflect) + "</label> damage from <strong>" + playerMove.Name + "</strong> (" + profile.EnemyHP + ").<br/>";
+                        }
+                        else if (enemyMove.Type == terms.Types.Defense && playerMove.Name == terms.Cards.BattleAxe) {
+                            return "Enemy took <label class='text-danger'>" + (playerMove.Damage - Math.round(playerMove.Damage * (enemyMove.Shield * playerMove.Shield))) + "</label> damage from <strong>" + playerMove.Name + "</strong> (" + profile.EnemyHP + ").<br/>";
                         }
                         else if (enemyMove.Type == terms.Types.Attack && playerMove.Name == terms.Cards.HolyShield) {
                             if (enemyMove.Name == terms.Cards.ArrowShot) {
@@ -1212,8 +1310,6 @@
                     case terms.Actions.Penalty:
                         return "Enemy took <label class='text-danger'>" + enemyMove.HPPenalTy + "</label> damage from <strong>" + enemyMove.Name + "</strong> penalty effect (" + profile.EnemyHP + ").<br/>";
                     case terms.Actions.Block:
-                        console.log(playerMove);
-                        console.log(enemyMove);
                         if ((enemyMove.Name != terms.Cards.DefendAndCounter
                             && !playerMove.Damage && !playerMove.Damage2)
                             || (enemyMove.Name == terms.Cards.DefendAndCounter
@@ -1233,19 +1329,17 @@
                             return "Enemy blocked incoming <label class='text-info'>" + Math.round(playerMove.Damage * enemyMove.Shield) + "</label> damage using <strong>" + enemyMove.Name + "</strong>.<br/>";
                         }
                     case terms.Actions.Heal:
-                        if (playerMove.Name == terms.Cards.HolyShield) {
+                        if (isPlayerHeal) {
+                            return "Enemy restored <label class='text-success'>" + playerMove.EnemyHeal + "</label> HP from enemy card <strong>" + playerMove.Name + "</strong> (" + profile.EnemyHP + ").<br/>";
+                        }
+                        else if (playerMove.Name == terms.Cards.HolyShield) {
                             return "Enemy restored <label class='text-success'>" + (enemyMove.Heal + Math.round((enemyMove.Heal * playerMove.Heal))) + "</label> HP using <strong>" + enemyMove.Name + "</strong> (" + profile.EnemyHP + ").<br/>";
                         }
                         else if (enemyMove.Name == terms.Cards.SecretHerb && playerMove.Type != terms.Types.Defense) {
                             return "Enemy restored <label class='text-success'>" + enemyMove.Heal2 + "</label> HP using <strong>" + enemyMove.Name + "</strong> (" + profile.EnemyHP + ").<br/>";
                         }
                         else {
-                            if (!isPlayerHeal) {
-                                return "Enemy restored <label class='text-success'>" + enemyMove.Heal + "</label> HP using <strong>" + enemyMove.Name + "</strong> (" + profile.EnemyHP + ").<br/>";
-                            }
-                            else {
-                                return "Enemy restored <label class='text-success'>" + playerMove.EnemyHeal + "</label> HP from enemy card <strong>" + playerMove.Name + "</strong> (" + profile.EnemyHP + ").<br/>";
-                            }
+                            return "Enemy restored <label class='text-success'>" + enemyMove.Heal + "</label> HP using <strong>" + enemyMove.Name + "</strong> (" + profile.EnemyHP + ").<br/>";
                         }
                 }
             }
@@ -1306,6 +1400,7 @@
                     profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.DefendAndCounter) {
                     profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
@@ -1785,9 +1880,9 @@
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
 
+                    profile.EnemyHP = module.deductHP(false, profile.EnemyHP, Math.round(enemyMove.Damage * playerMove.Reflect));
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
-                    module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MagicHeal) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
@@ -1862,9 +1957,9 @@
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Block, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.HolyShield) {
-                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect), playerMove.Shield);
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, Math.round(playerMove.Damage * enemyMove.Reflect));
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
-                    module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Block, playerMove, enemyMove);
+                    module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
                     profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage, enemyMove.Shield);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
@@ -2141,10 +2236,16 @@
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, true);
                 }
                 else if (enemyMove.Name == terms.Cards.DefendAndCounter) {
-                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, playerMove.EnemyHeal);
-                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
-
                     profile.PlayerHP = module.deductHP(true, profile.PlayerHP, enemyMove.Damage);
+                    module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
+
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal); 
+                    module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, true);
+
+                    module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, playerMove.EnemyHeal);
+                    module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, true);
                 }
                 else if (enemyMove.Name == terms.Cards.MagicHeal) {
                     profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
@@ -2204,6 +2305,10 @@
                     break;
             }
 
+            if (enemyMove == undefined) {
+                console.log(enemyMove);
+            }
+
             module.battleLogs += "You used <strong>" + playerMove.Name.toUpperCase() + "</strong>. Enemy used <strong>" + enemyMove.Name.toUpperCase() + "</strong>.<br/>";
 
             var profile = module.getProfile();
@@ -2217,6 +2322,8 @@
             module.checkWinner(movePosition, data);
         },
         onLoad: function () {
+            $("#home-nav").attr("href", window.location.href);
+
             module.attachEvents();
 
             localStorage.setItem("CardDeck", JSON.stringify(module.cardDeck));
@@ -2238,6 +2345,7 @@
             $("#btn-next-boss").addClass("hidden");
 
             $("#battle-logs-container").html("");
+            module.status = "";
 
             module.onBattle();
         },
@@ -2245,6 +2353,7 @@
             $("#btn-battle-again").addClass("hidden");
 
             $("#battle-logs-container").html("");
+            module.status = "";
 
             module.onBattle();
         },
@@ -2280,14 +2389,6 @@
 
             module.gameRound(module.currentRound);
         },
-        onPVP: function () {
-            pvpModule.joinRoom(prompt("Please enter room id"));
-            
-            module.onBattle();
-            module.pvp = true;
-
-            $("#enemy-name-label").text("Waitings for Enemy to Join...");
-        },
         onConfirmBattle: function () {
             var profile = module.getProfile();
 
@@ -2321,14 +2422,11 @@
 
             module.battleLogs += "<h3>Round " + module.currentRound + "</h3>";
 
-            if (!module.pvp)
-                module.getMoveResult(1, enemyActions);
-            else {
-                $("#btn-confirm").prop( "disabled", true);
-                $("#btn-confirm").html("Waiting For Enemy Attack");
-                pvpModule.addEditProfile(profile);
-                pvpModule.getMoveResult(module.getMovesDetails('all'));
-            }
+            module.getMoveResult(1, enemyActions);
+        },
+        onResetAccount: function () {
+            localStorage.removeItem("Profile");
+            window.location.reload();
         },
         onSavePlayer: function () {
             module.addEditProfile({
@@ -2343,69 +2441,70 @@
             $("#saved-player-container").removeClass("hidden");
         },
         onSelectAction: function () {
-            var cardId = $(this).data("id"),
-                icons = module.getIcons(),
-                src = "",
-                action = "";
+            if (module.status == "") {
+                var cardId = $(this).data("id"),
+                    icons = module.getIcons(),
+                    action = "";
 
-            if (cardId) {
-                var card = module.getCardDeckById(cardId);;
+                if (cardId) {
+                    var card = module.getCardDeckById(cardId);;
 
-                action = card.Name;
+                    action = card.Name;
+                }
+                else if (cardId == 0) {
+                    action = "Undo";
+                }
+
+                if ($("#first-move").attr("src") == icons.Add
+                    && action != "Undo") {
+                    $("#first-move").attr("src", card.Image)
+                        .attr("title", action)
+                        .data("id", cardId);
+
+                    $(this).data("id", 0);
+                    $(this).find("img").attr("src", icons.Undo);
+
+                    $(this).attr("title", "Undo")
+                        .attr("position", "first");
+                }
+                else if ($("#second-move").attr("src") == icons.Add
+                    && action != "Undo") {
+                    $("#second-move").attr("src", card.Image)
+                        .attr("title", action)
+                        .data("id", cardId);
+
+                    $(this).data("id", 0);
+                    $(this).find("img").attr("src", icons.Undo);
+
+                    $(this).attr("title", "Undo")
+                        .attr("position", "second");
+                }
+                else if ($("#last-move").attr("src") == icons.Add
+                    && action != "Undo") {
+                    $("#last-move").attr("src", card.Image)
+                        .attr("title", action)
+                        .data("id", cardId);
+
+                    $(this).data("id", 0);
+                    $(this).find("img").attr("src", icons.Undo);
+
+                    $(this).attr("title", "Undo")
+                        .attr("position", "last");
+                }
+                else if (action == "Undo") {
+                    var position = $(this).attr("position");
+
+                    var details = module.getMovesDetails(position);
+
+                    $(this).find("img").attr("src", details.Src);
+                    $(this).attr("title", details.Title);
+                    $(this).data("id", module.getCardBySrc(details.Src).CardId);
+
+                    $(this).removeAttr("position");
+                }
+
+                module.checkIfBattleReady();
             }
-            else if (cardId == 0) {
-                action = "Undo";
-            }
-
-            if ($("#first-move").attr("src") == icons.Add
-                && action != "Undo") {
-                $("#first-move").attr("src", card.Image)
-                    .attr("title", action)
-                    .data("id", cardId);
-
-                $(this).data("id", 0);
-                $(this).find("img").attr("src", icons.Undo);
-
-                $(this).attr("title", "Undo")
-                    .attr("position", "first");
-            }
-            else if ($("#second-move").attr("src") == icons.Add
-                && action != "Undo") {
-                $("#second-move").attr("src", card.Image)
-                    .attr("title", action)
-                    .data("id", cardId);
-
-                $(this).data("id", 0);
-                $(this).find("img").attr("src", icons.Undo);
-
-                $(this).attr("title", "Undo")
-                    .attr("position", "second");
-            }
-            else if ($("#last-move").attr("src") == icons.Add
-                && action != "Undo") {
-                $("#last-move").attr("src", card.Image)
-                    .attr("title", action)
-                    .data("id", cardId);
-
-                $(this).data("id", 0);
-                $(this).find("img").attr("src", icons.Undo);
-
-                $(this).attr("title", "Undo")
-                    .attr("position", "last");
-            }
-            else if (action == "Undo") {
-                var position = $(this).attr("position");
-
-                var details = module.getMovesDetails(position);
-
-                $(this).find("img").attr("src", details.Src);
-                $(this).attr("title", details.Title);
-                $(this).data("id", module.getCardBySrc(details.Src).CardId);
-
-                $(this).removeAttr("position");
-            }
-
-            module.checkIfBattleReady();
         },
         onViewCards: function () {
             if ($(this).text() == "View")
@@ -2430,45 +2529,86 @@
                 template += "<button data-id='" + ownCards[i].Id + "' title='" + ownCards[i].Name + "' class='action'><img src='" + ownCards[i].Image + "' /></button>";
             }
 
-            var count = 1;
-            var interval = setInterval(function () {
-                count++;
+            $("#hand-cards-container").html(template);
+            //clearInterval(interval);
 
-                $("#progress-hand-cards").attr("aria-valuenow", count * 50);
-                $("#progress-hand-cards").css("width", count * 50 + "%");
+            if (AI) {
+                setTimeout(function () {
+                    AI.selectAction();
+                }, 500);
+            }
 
-                if (count == 3) {
-                    $("#hand-cards-container").html(template);
-                    clearInterval(interval);
-                }
-            }, 1000);
+            //var count = 1;
+            //var interval = setInterval(function () {
+            //    count++;
+
+            //    $("#progress-hand-cards").attr("aria-valuenow", count * 50);
+            //    $("#progress-hand-cards").css("width", count * 50 + "%");
+
+            //    if (count == 3) {
+            //        $("#hand-cards-container").html(template);
+            //        clearInterval(interval);
+
+            //        if (AI) {
+            //            setTimeout(function () {
+            //                AI.selectAction();
+            //            }, 1000);
+            //        }
+            //    }
+            //}, 1000);
         },
         showRoundBattleLog: function (result) {
             if (result) {
                 $("#proceed-battle-container").removeClass("hidden");
 
                 if (result == "Win") {
+                    module.status = "end";
+
                     module.battleLogs = "<label class='text-success'><h2>You Win!</h2></label>" + module.battleLogs;
 
                     var profile = module.getProfile();
-                    profile.Level += 1;
-                    profile.EnemyLevel += 1;
+
+                    if (profile.Level < 10) {
+                        profile.Level += 1;
+
+                        profile.EnemyLevel += 1;
+                    }
 
                     module.addEditProfile(profile);
                     
                     $("#btn-confirm").addClass("hidden");
                     $("#btn-next-boss").toggleClass("hidden");
                     $("#btn-battle-again").toggleClass("hidden");
+
+                    if (AI) {
+                        setTimeout(function () {
+                            AI.nextBattle();
+                        }, 500);
+                    }
                 }
                 else if (result == "Lose") {
+                    module.status = "end";
+
                     $("#btn-confirm").addClass("hidden");
                     $("#btn-battle-again").toggleClass("hidden");
                     module.battleLogs = "<label class='text-danger'><h2>You Lose!</h2></label>" + module.battleLogs;
+
+                    if (AI) {
+                        setTimeout(function () {
+                            AI.tryAgain();
+                        }, 500);
+                    }
                 }
                 else {
                     $("#btn-confirm").addClass("hidden");
                     $("#btn-battle-again").toggleClass("hidden");
                     module.battleLogs = "<label class='text-info'><h2>Draw!</h2></label>" + module.battleLogs;
+
+                    if (AI) {
+                        setTimeout(function () {
+                            AI.tryAgain();
+                        }, 500);
+                    }
                 }
             }
 
@@ -2491,99 +2631,89 @@
             profile.EnemyHP = profile.EnemyHP > module.enemyMaxHP() ? module.enemyMaxHP() : profile.EnemyHP;
 
             $("#player-hp").attr("aria-valuenow", profile.PlayerHP)
-                .css("width", playerHPPctg + "%")
-                .html(profile.PlayerHP + "/" + module.maxHP());
+                .css("width", playerHPPctg + "%");
+
+            $("#player-hp-label").html("<strong>(" + profile.PlayerHP + "/" + module.maxHP() + " HP)</strong>");
+            $("#enemy-hp-label").html("<strong>(" + profile.EnemyHP + "/" + module.enemyMaxHP() + " HP)</strong>")
 
             $("#enemy-hp").attr("aria-valuenow", profile.EnemyHP)
-                .css("width", enemyHPPctg + "%")
-                .html(profile.EnemyHP + "/" + + module.enemyMaxHP());
+                .css("width", enemyHPPctg + "%");
 
             if (playerHPPctg <= 50 && playerHPPctg > 30) {
                 $("#player-hp").removeClass("progress-bar-success")
                     .removeClass("progress-bar-danger")
                     .addClass("progress-bar-warning");
+
+                $("#player-hp-label").removeClass("text-success")
+                    .removeClass("text-danger")
+                    .addClass("text-warning");
             }
             else if (playerHPPctg <= 30) {
                 $("#player-hp").removeClass("progress-bar-warning")
                     .removeClass("progress-bar-success")
                     .addClass("progress-bar-danger");
+
+                $("#player-hp-label").removeClass("text-warning")
+                    .removeClass("text-success")
+                    .addClass("text-danger");
             }
             else {
                 $("#player-hp").removeClass("progress-bar-warning")
                     .removeClass("progress-bar-danger")
                     .addClass("progress-bar-success");
+
+                $("#player-hp-label").removeClass("text-warning")
+                    .removeClass("text-danger")
+                    .addClass("text-success");
             }
 
             if (enemyHPPctg <= 50 && enemyHPPctg > 30) {
                 $("#enemy-hp").removeClass("progress-bar-success")
                     .removeClass("progress-bar-danger")
                     .addClass("progress-bar-warning");
+
+                $("#enemy-hp-label").removeClass("text-success")
+                    .removeClass("text-danger")
+                    .addClass("text-warning");
             }
             else if (enemyHPPctg <= 30) {
                 $("#enemy-hp").removeClass("progress-bar-warning")
                     .removeClass("progress-bar-success")
                     .addClass("progress-bar-danger");
+
+                $("#enemy-hp-label").removeClass("text-warning")
+                    .removeClass("text-success")
+                    .addClass("text-danger");
             }
             else {
                 $("#enemy-hp").removeClass("progress-bar-warning")
                     .removeClass("progress-bar-danger")
                     .addClass("progress-bar-success");
+
+                $("#enemy-hp-label").removeClass("text-warning")
+                    .removeClass("text-danger")
+                    .addClass("text-success");
             }
         }
     };
 
-    pvpOptions = {
-        playerName: JSON.parse(localStorage.getItem("Profile")).Name,
-        addEditProfile: (payload) => {
-            var profile = module.getProfile();
+    var AI = {
+        selectAction: function () {
+            $("button.action").eq(0).trigger("click");
+            $("button.action").eq(1).trigger("click");
+            $("button.action").eq(2).trigger("click");
 
-            console.log(payload);
-
-            if (profile.Name == payload.Name) {
-                profile.PlayerCards = payload.PlayerCards;
-                profile.PlayerHP = payload.PlayerHP;
-                profile.PlayerHands = payload.PlayerHands;
-                profile.PlayerUsedCards = payload.PlayerUsedCards;
-            } else {
-                profile.EnemyCards = payload.PlayerCards;
-                profile.EnemyHP = payload.PlayerHP;
-                profile.EnemyHands = payload.PlayerHands;
-                profile.EnemyUsedCards = payload.PlayerUsedCards;    
-            }
-
-            module.profile = profile;
-            localStorage.setItem("Profile", JSON.stringify(module.profile));
+            setTimeout(function () {
+                $("#btn-confirm").trigger("click");
+            }, 500);
         },
-        getMoveResult: (moves) => {
-            pvpModule.combatStatus++;
-            console.log("combat status: " + pvpModule.combatStatus)
-
-            console.log(moves);
-            if (JSON.stringify(moves) != JSON.stringify(module.getMovesDetails('all')))
-                localStorage.setItem('EnemyMoves', JSON.stringify(moves));
-
-            if (pvpModule.combatStatus == 2) {
-                pvpModule.combatStatus = 0;
-                enemyMovesCard = JSON.parse(localStorage.getItem('EnemyMoves'));
-                enemyMoves = [];
-                enemyMoves[0] = module.getCardDeckById(enemyMovesCard.FirstId);
-                enemyMoves[1] = module.getCardDeckById(enemyMovesCard.SecondId);
-                enemyMoves[2] = module.getCardDeckById(enemyMovesCard.LastId);
-                module.getMoveResult(1, enemyMoves);
-                $("#btn-confirm").prop( "disabled", false);
-                $("#btn-confirm").html("Proceed Battle!");
-            }
+        tryAgain: function () {
+            $("#btn-battle-again").trigger("click");
         },
-        onJoin: (name) => {
-            console.log(name);
-            if (name.Name != JSON.parse(localStorage.getItem("Profile")).Name) {
-                $("#enemy-name-label").text(name.Name);
-                alert("The Battle Begins");
-                pvpModule.onJoin();
-            }
+        nextBattle: function () {
+            $("#btn-next-boss").trigger("click");
         }
     };
 
     $(window).on("load", module.onLoad);
-    $(window).on("load", pvpModule.onLoad(pvpOptions));
 </script>
