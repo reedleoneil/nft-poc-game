@@ -28,6 +28,20 @@
         width: 150px;
     }
 
+    .last-round {
+        height: 75px;
+        width: 75px;
+        margin: 10px;
+    }
+
+    .margin-md-bottom {
+        margin-bottom: 5px;
+    }
+
+    .margin-lg-bottom {
+        margin-bottom: 10px;
+    }
+
     .progress {
         height: 20px;
         font-size: 18px;
@@ -96,6 +110,7 @@
                         </td>
                         <td>
                             <button id="btn-battle" class="btn btn-default">Battle!</button>
+                            <button id="btn-auto-battle" class="btn btn-default">Auto-Battle!</button>
                             <button class="btn btn-default">PVP</button>
                             <button class="btn btn-default">Market</button>
                             <button id="btn-reset-account" class="btn btn-default">Reset Account</button>
@@ -218,7 +233,8 @@
                                  aria-valuemin="0" aria-valuemax="1000" style="width:100%">
                             </div>
                         </div>
-                        <img class="img-avatar" src="https://cdn-icons-png.flaticon.com/512/4352/4352135.png" />
+                        <div class="margin-lg-bottom"><img class="img-avatar" src="https://cdn-icons-png.flaticon.com/512/4352/4352135.png" /></div>
+                        <div id="player-last-round" class="text-center"></div>
                     </td>
                     <td class="col-lg-2 text-center"><h1>VS.</h1></td>
                     <td class="col-lg-5 text-center">
@@ -229,7 +245,8 @@
                                  aria-valuemin="0" aria-valuemax="1500" style="width:100%">
                             </div>
                         </div>
-                        <img class="img-avatar" id="enemy-image" src="" />
+                        <div class="margin-lg-bottom"><img class="img-avatar" id="enemy-image" src="" /></div>
+                        <div id="enemy-last-round" class="text-center"></div>
                     </td>
                 </tr>
             </table>
@@ -273,7 +290,8 @@
                                     <tr class="text-center">
                                         <td class="col-lg-4"><label>CARD NAME</label></td>
                                         <td class="col-lg-2"><label>CARD TYPE</label></td>
-                                        <td class="col-lg-6"><label>EFFECT</label></td>
+                                        <td class="col-lg-2"><label>LEFT IN DECK</label></td>
+                                        <td class="col-lg-4"><label>EFFECT</label></td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -283,6 +301,7 @@
                                             <img class="action" src="https://cdn-icons-png.flaticon.com/512/4334/4334081.png" />
                                         </td>
                                         <td class="type-label">ATTACK</td>
+                                        <td name="Sword Slash" class="type-label">4</td>
                                         <td class="h4">Deal 100 damage to the enemy.</td>
                                     </tr>
                                     <tr>
@@ -291,6 +310,7 @@
                                             <img class="action" src="https://cdn-icons-png.flaticon.com/512/1825/1825371.png" />
                                         </td>
                                         <td class="type-label">ATTACK</td>
+                                        <td name="Battle Axe" class="type-label">4</td>
                                         <td class="h4">Deal 130 damage to the enemy then inflict 20 damage to own HP after. Reduce damage reduction by 50% when enemy uses a <strong>Defense Card</strong>.</td>
                                     </tr>
                                     <tr>
@@ -299,6 +319,7 @@
                                             <img class="action" src="https://cdn-icons-png.flaticon.com/512/625/625445.png" />
                                         </td>
                                         <td class="type-label">ATTACK</td>
+                                        <td name="Arrow Shot" class="type-label">4</td>
                                         <td class="h4">Deal 120 damage to the enemy if they play an <strong>Attack Card</strong> and only deal 80 damage if they play a <strong>Non-Attack Card (Defense/Support)</strong>.</td>
                                     </tr>
                                     <tr>
@@ -307,6 +328,7 @@
                                             <img class="action" src="https://cdn-icons-png.flaticon.com/512/5574/5574134.png" />
                                         </td>
                                         <td class="type-label">ATTACK</td>
+                                        <td name="Assassin Dagger" class="type-label">4</td>
                                         <td class="h4">Deal 60 damage to the enemy. Ignore 100% damage reduction from <strong>Defense Cards</strong> except <strong>Holy Shield</strong> and disable healing effect from <strong>Support Cards</strong> when played by your enemy.</td>
                                     </tr>
                                     <tr>
@@ -315,6 +337,7 @@
                                             <img class="action" src="https://cdn-icons-png.flaticon.com/512/929/929429.png" />
                                         </td>
                                         <td class="type-label">DEFENSE</td>
+                                        <td name="Mighty Shield" class="type-label">4</td>
                                         <td class="h4">Block 60% damage from the enemy.</td>
                                     </tr>
                                     <tr>
@@ -323,6 +346,7 @@
                                             <img class="action" src="https://cdn-icons-png.flaticon.com/512/1044/1044007.png" />
                                         </td>
                                         <td class="type-label">DEFENSE</td>
+                                        <td name="Holy Shield" class="type-label">4</td>
                                         <td class="h4">
                                             Block 40% damage and deflect 20% damage back to the enemy if they deal damage to you. Enemy will receive 40% more healing if they play a <strong>Support Card</strong>.
                                         </td>
@@ -333,6 +357,7 @@
                                             <img class="action" src="https://cdn-icons-png.flaticon.com/512/602/602048.png" />
                                         </td>
                                         <td class="type-label">DEFENSE</td>
+                                        <td name="Defend and Counter" class="type-label">4</td>
                                         <td class="h4">Blocks 30% damage from the enemy then deal 40 damage to them.</td>
                                     </tr>
                                     <tr>
@@ -341,6 +366,7 @@
                                             <img class="action" src="https://cdn-icons-png.flaticon.com/512/693/693337.png" />
                                         </td>
                                         <td class="type-label">SUPPORT</td>
+                                        <td name="Magic Heal" class="type-label">4</td>
                                         <td class="h4">Restore 50 HP</td>
                                     </tr>
                                     <tr>
@@ -349,6 +375,7 @@
                                             <img class="action" src="https://cdn-icons-png.flaticon.com/512/2917/2917995.png" />
                                         </td>
                                         <td class="type-label">SUPPORT</td>
+                                        <td name="Secret Herb" class="type-label">4</td>
                                         <td class="h4">Restore 90 HP when enemy plays a <strong>Defense Card</strong> and restore only 30 HP when enemy plays a <strong>Non-Defense Card (Attack/Support)</strong>.</td>
                                     </tr>
                                     <tr>
@@ -357,6 +384,7 @@
                                             <img class="action" src="https://cdn-icons-png.flaticon.com/512/1721/1721167.png" />
                                         </td>
                                         <td class="type-label">SUPPORT</td>
+                                        <td name="Mercy Heal" class="type-label">4</td>
                                         <td class="h4">Restore 70 HP then restore 20 enemy HP.</td>
                                     </tr>
                                 </tbody>
@@ -414,6 +442,7 @@
 
     var module = {
         profile: {},
+        autoBattle: false,
         battleLogs: "",
         status: "",
         currentRound: 1,
@@ -432,6 +461,10 @@
                     return enemyHP;
                 }
             }
+        },
+        lastRoundMoves: {
+            Player: [],
+            Enemy: []
         },
         cards: [
             {
@@ -920,7 +953,10 @@
             }
         ],
         attachEvents: function () {
-            $("#btn-battle").on("click", module.onBattle);
+            $("#btn-battle").on("click", function () {
+                module.autoBattle = false;
+                module.onBattle();
+            });
             $("#btn-save-player").on("click", module.onSavePlayer);
             $("#btn-view-cards").on("click", module.onViewCards);
             $("body").delegate("button.action", "click", module.onSelectAction);
@@ -928,6 +964,7 @@
             $("#btn-next-boss").on("click", module.onBattleNextBoss);
             $("#btn-battle-again").on("click", module.onBattleAgain);
             $("#btn-reset-account").on("click", module.onResetAccount);
+            $("#btn-auto-battle").on("click", module.onAutoBattle);
         },
         addEditProfile: function (data) {
             module.profile = data;
@@ -989,8 +1026,9 @@
 
                 if (movePosition <= 3)
                     module.getMoveResult(movePosition, data);
-                else
+                else {
                     module.showRoundBattleLog();
+                }
             }
         },
         gameRound: function (round) {
@@ -2286,6 +2324,9 @@
         },
         getMoveResult: function (movePosition, data) {
             var moves = module.getMovesDetails("all");
+            module.lastRoundMoves.Player = moves;
+            module.lastRoundMoves.Enemy = data;
+
             var enemyMove = "";
             switch (movePosition) {
                 case 1:
@@ -2305,10 +2346,6 @@
                     break;
             }
 
-            if (enemyMove == undefined) {
-                console.log(enemyMove);
-            }
-
             module.battleLogs += "You used <strong>" + playerMove.Name.toUpperCase() + "</strong>. Enemy used <strong>" + enemyMove.Name.toUpperCase() + "</strong>.<br/>";
 
             var profile = module.getProfile();
@@ -2320,6 +2357,10 @@
             module.updateHPBars();
 
             module.checkWinner(movePosition, data);
+        },
+        onAutoBattle: function () {
+            module.autoBattle = true;
+            module.onBattle();
         },
         onLoad: function () {
             $("#home-nav").attr("href", window.location.href);
@@ -2529,33 +2570,56 @@
                 template += "<button data-id='" + ownCards[i].Id + "' title='" + ownCards[i].Name + "' class='action'><img src='" + ownCards[i].Image + "' /></button>";
             }
 
-            $("#hand-cards-container").html(template);
-            //clearInterval(interval);
+            if (module.autoBattle) {
+                $("#hand-cards-container").html(template);
 
-            if (AI) {
                 setTimeout(function () {
                     AI.selectAction();
                 }, 500);
             }
+            else {
+                var count = 1;
+                var interval = setInterval(function () {
+                    count++;
 
-            //var count = 1;
-            //var interval = setInterval(function () {
-            //    count++;
+                    $("#progress-hand-cards").attr("aria-valuenow", count * 50);
+                    $("#progress-hand-cards").css("width", count * 50 + "%");
 
-            //    $("#progress-hand-cards").attr("aria-valuenow", count * 50);
-            //    $("#progress-hand-cards").css("width", count * 50 + "%");
+                    if (count == 3) {
+                        $("#hand-cards-container").html(template);
+                        clearInterval(interval);
+                        module.updateLeftInDeck();
+                    }
+                }, 800);
+            }
+        },
+        showLastRoundMoves: function () {
+            var playerTemplate = "";
+            var enemyTemplate = "";
+            for (var i = 0; i < 3; i++) {
+                var card = {};
+                if (i == 0) {
+                    card = module.cardDeck.filter(function (i) {
+                        return i.Id == module.lastRoundMoves.Player.FirstId;
+                    })[0];
+                }
+                else if (i == 1) {
+                    card = module.cardDeck.filter(function (i) {
+                        return i.Id == module.lastRoundMoves.Player.SecondId;
+                    })[0];
+                }
+                else {
+                    card = module.cardDeck.filter(function (i) {
+                        return i.Id == module.lastRoundMoves.Player.LastId;
+                    })[0];
+                }
 
-            //    if (count == 3) {
-            //        $("#hand-cards-container").html(template);
-            //        clearInterval(interval);
+                playerTemplate += "<img src='" + card.Image + "' class='last-round' title='" + card.Name + "' />";
+                enemyTemplate += "<img src='" + module.lastRoundMoves.Enemy[i].Image + "' class='last-round' title='" + module.lastRoundMoves.Enemy[i].Name + "' />";
+            }
 
-            //        if (AI) {
-            //            setTimeout(function () {
-            //                AI.selectAction();
-            //            }, 1000);
-            //        }
-            //    }
-            //}, 1000);
+            $("#player-last-round").html("<label>Last Round Moves:</label><br/>" + playerTemplate);
+            $("#enemy-last-round").html("<label>Last Round Moves:</label><br/>" + enemyTemplate);
         },
         showRoundBattleLog: function (result) {
             if (result) {
@@ -2580,7 +2644,7 @@
                     $("#btn-next-boss").toggleClass("hidden");
                     $("#btn-battle-again").toggleClass("hidden");
 
-                    if (AI) {
+                    if (module.autoBattle) {
                         setTimeout(function () {
                             AI.nextBattle();
                         }, 500);
@@ -2593,7 +2657,7 @@
                     $("#btn-battle-again").toggleClass("hidden");
                     module.battleLogs = "<label class='text-danger'><h2>You Lose!</h2></label>" + module.battleLogs;
 
-                    if (AI) {
+                    if (module.autoBattle) {
                         setTimeout(function () {
                             AI.tryAgain();
                         }, 500);
@@ -2604,7 +2668,7 @@
                     $("#btn-battle-again").toggleClass("hidden");
                     module.battleLogs = "<label class='text-info'><h2>Draw!</h2></label>" + module.battleLogs;
 
-                    if (AI) {
+                    if (module.autoBattle) {
                         setTimeout(function () {
                             AI.tryAgain();
                         }, 500);
@@ -2612,12 +2676,14 @@
                 }
             }
 
+            module.showLastRoundMoves();
+
             $("#battle-logs-container").prepend(module.battleLogs);
             module.battleLogs = "";
 
             if (!result) {
                 module.currentRound++;
-
+                module.updateLeftInDeck();
                 module.gameRound(module.currentRound);
             }
         },
@@ -2693,6 +2759,19 @@
                 $("#enemy-hp-label").removeClass("text-warning")
                     .removeClass("text-danger")
                     .addClass("text-success");
+            }
+        },
+        updateLeftInDeck: function () {
+            var profile = module.getProfile();
+
+            for (var i = 0; i < module.cards.length; i++) {
+                var card = module.cards[i];
+
+                var count = profile.PlayerCards.filter(function (i) {
+                    return i.CardId == card.CardId;
+                }).length;
+
+                $("[name='" + module.cards[i].Name + "']").text(count);
             }
         }
     };
