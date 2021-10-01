@@ -5,7 +5,7 @@
 
     .btn.btn-primary.btn-circle {
         position: absolute;
-        margin-left: -30px;
+        margin-left: -40px;
         width: 30px;
         height: 30px;
         padding: 6px 0px;
@@ -35,8 +35,8 @@
     }
 
     .img-avatar {
-        height: 150px;
-        width: 150px;
+        height: 120px;
+        width: 120px;
     }
 
     .type-label {
@@ -46,17 +46,17 @@
     }
 
     button.action {
-        margin: 10px;
+        margin: 20px;
     }
 
         button.action img {
-            height: 120px;
-            width: 120px;
+            height: 100px;
+            width: 100px;
         }
 
     .action {
-        height: 150px;
-        width: 150px;
+        height: 120px;
+        width: 120px;
     }
 
     .action-md {
@@ -283,7 +283,7 @@
                         <h4 id="player-hp-label"><strong>(1000/1000 HP)</strong></h4>
                         <div class="progress margin-md-bottom">
                             <div id="player-hp" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1000"
-                                 aria-valuemin="0" aria-valuemax="1000" style="width:100%">
+                                 aria-valuemin="0" aria-valuemax="" style="width:100%">
                             </div>
                         </div>
                         <div class="margin-lg-bottom"><img class="img-avatar" src="https://cdn-icons-png.flaticon.com/512/4352/4352135.png" /></div>
@@ -295,7 +295,7 @@
                         <h4 id="enemy-hp-label"><strong>(1000/1000 HP)</strong></h4>
                         <div class="progress margin-md-bottom">
                             <div id="enemy-hp" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1500"
-                                 aria-valuemin="0" aria-valuemax="1500" style="width:100%">
+                                 aria-valuemin="0" aria-valuemax="" style="width:100%">
                             </div>
                         </div>
                         <div class="margin-lg-bottom"><img class="img-avatar" id="enemy-image" src="" /></div>
@@ -307,15 +307,15 @@
             <table class="table table-borderless">
                 <tr class="row text-center">
                     <td class="col-lg-4">
-                        <h2>First Move</h2>
+                        <h3>First Move</h3>
                         <img id="first-move" class="action card-moves" src="https://image.flaticon.com/icons/png/512/2997/2997933.png" />
                     </td>
                     <td class="col-lg-4">
-                        <h2>Second Move</h2>
+                        <h3>Second Move</h3>
                         <img id="second-move" class="action card-moves" src="https://image.flaticon.com/icons/png/512/2997/2997933.png" />
                     </td>
                     <td class="col-lg-4">
-                        <h2>Last Move</h2>
+                        <h3>Last Move</h3>
                         <img id="last-move" class="action card-moves" src="https://image.flaticon.com/icons/png/512/2997/2997933.png" />
                     </td>
                 </tr>
@@ -915,7 +915,7 @@
             $("#btn-next-boss").on("click", module.onBattleNextBoss);
             $("#btn-battle-again").on("click", module.onBattleAgain);
             $("#btn-reset-account").on("click", module.onResetAccount);
-            $("#btn-auto-battle").on("click", module.onAutoBattle);
+           /* $("#btn-auto-battle").on("click", module.onAutoBattle);*/
             $("body").delegate(".btn-card-effect", "click", module.onShowCardEffect);
         },
         addEditProfile: function (data) {
@@ -2366,7 +2366,7 @@
                 return i.Level == profile.Level;
             })[0];
 
-            $("#enemy-name-label").text(monster.Name);
+            $("#enemy-name-label").text(monster.Name + " (Level " + monster.Level + ")");
             $("#enemy-image").attr("src", monster.Image);
 
             profile.PlayerHP = module.maxHP();
@@ -2686,12 +2686,14 @@
             profile.PlayerHP = profile.PlayerHP > module.maxHP() ? module.maxHP() : profile.PlayerHP;
             profile.EnemyHP = profile.EnemyHP > module.enemyMaxHP() ? module.enemyMaxHP() : profile.EnemyHP;
 
+            $("#player-hp").attr("aria-valuemax", module.maxHP());
             $("#player-hp").attr("aria-valuenow", profile.PlayerHP)
                 .css("width", playerHPPctg + "%");
 
             $("#player-hp-label").html("<strong>(" + profile.PlayerHP + "/" + module.maxHP() + " HP)</strong>");
             $("#enemy-hp-label").html("<strong>(" + profile.EnemyHP + "/" + module.enemyMaxHP() + " HP)</strong>")
 
+            $("#enemy-hp").attr("aria-valuemax", module.enemyMaxHP());
             $("#enemy-hp").attr("aria-valuenow", profile.EnemyHP)
                 .css("width", enemyHPPctg + "%");
 
