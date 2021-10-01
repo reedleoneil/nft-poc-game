@@ -1121,11 +1121,11 @@
             if (position == "all") {
                 return {
                     FirstTitle: $("#first-move").attr("title"),
-                    FirstId: $("#first-move").data("id"),
+                    FirstId: $("#first-move").attr("data-id"),
                     SecondTitle: $("#second-move").attr("title"),
-                    SecondId: $("#second-move").data("id"),
+                    SecondId: $("#second-move").attr("data-id"),
                     LastTitle: $("#last-move").attr("title"),
-                    LastId: $("#last-move").data("id"),
+                    LastId: $("#last-move").attr("data-id"),
                 };
             }
             else {
@@ -2385,6 +2385,8 @@
             $("#btn-battle-again").addClass("hidden");
             $("#btn-next-boss").addClass("hidden");
 
+            $("#player-last-round").html("");
+            $("#enemy-last-round").html("");
             $("#battle-logs-container").html("");
             module.status = "";
 
@@ -2393,6 +2395,8 @@
         onBattleAgain: function () {
             $("#btn-battle-again").addClass("hidden");
 
+            $("#player-last-round").html("");
+            $("#enemy-last-round").html("");
             $("#battle-logs-container").html("");
             module.status = "";
 
@@ -2483,26 +2487,26 @@
         },
         onSelectAction: function () {
             if (module.status == "") {
-                var cardId = $(this).data("id"),
+                var cardId = $(this).attr("data-id"),
+                    title = $(this).attr("title"),
                     icons = module.getIcons(),
                     action = "";
 
-                if (cardId) {
+                if (title == "Undo") {
+                    action = "Undo";
+                }
+                else {
                     var card = module.getCardDeckById(cardId);;
 
                     action = card.Name;
-                }
-                else if (cardId == 0) {
-                    action = "Undo";
                 }
 
                 if ($("#first-move").attr("src") == icons.Add
                     && action != "Undo") {
                     $("#first-move").attr("src", card.Image)
                         .attr("title", action)
-                        .data("id", cardId);
+                        .attr("data-id", cardId);
 
-                    $(this).data("id", 0);
                     $(this).find("img").attr("src", icons.Undo);
 
                     $(this).attr("title", "Undo")
@@ -2512,9 +2516,8 @@
                     && action != "Undo") {
                     $("#second-move").attr("src", card.Image)
                         .attr("title", action)
-                        .data("id", cardId);
+                        .attr("data-id", cardId);
 
-                    $(this).data("id", 0);
                     $(this).find("img").attr("src", icons.Undo);
 
                     $(this).attr("title", "Undo")
@@ -2524,9 +2527,8 @@
                     && action != "Undo") {
                     $("#last-move").attr("src", card.Image)
                         .attr("title", action)
-                        .data("id", cardId);
+                        .attr("data-id", cardId);
 
-                    $(this).data("id", 0);
                     $(this).find("img").attr("src", icons.Undo);
 
                     $(this).attr("title", "Undo")
@@ -2539,7 +2541,7 @@
 
                     $(this).find("img").attr("src", details.Src);
                     $(this).attr("title", details.Title);
-                    $(this).data("id", module.getCardBySrc(details.Src).CardId);
+                    //$(this).parent("button").attr("data-id", module.getCardBySrc(details.Src).CardId);
 
                     $(this).removeAttr("position");
                 }
@@ -2636,19 +2638,18 @@
                         profile.Level += 1;
 
                         profile.EnemyLevel += 1;
+
+                        module.addEditProfile(profile);
+                        if (module.autoBattle) {
+                            setTimeout(function () {
+                                AI.nextBattle();
+                            }, 500);
+                        }
                     }
 
-                    module.addEditProfile(profile);
-                    
                     $("#btn-confirm").addClass("hidden");
                     $("#btn-next-boss").toggleClass("hidden");
                     $("#btn-battle-again").toggleClass("hidden");
-
-                    if (module.autoBattle) {
-                        setTimeout(function () {
-                            AI.nextBattle();
-                        }, 500);
-                    }
                 }
                 else if (result == "Lose") {
                     module.status = "end";
