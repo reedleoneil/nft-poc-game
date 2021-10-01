@@ -3,6 +3,37 @@
         padding-top: 50px;
     }
 
+    .btn.btn-primary.btn-circle {
+        position: absolute;
+        margin-left: -30px;
+        width: 30px;
+        height: 30px;
+        padding: 6px 0px;
+        border-radius: 15px;
+        text-align: center;
+        font-size: 12px;
+        line-height: 1.42857;
+    }
+
+    .modal {
+        text-align: center;
+        padding: 0 !important;
+    }
+
+        .modal:before {
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            margin-right: -4px;
+        }
+
+    .modal-dialog {
+        display: inline-block;
+        text-align: left;
+        vertical-align: middle;
+    }
+
     .img-avatar {
         height: 150px;
         width: 150px;
@@ -26,6 +57,11 @@
     .action {
         height: 150px;
         width: 150px;
+    }
+
+    .action-md {
+        height: 100px;
+        width: 100px;
     }
 
     .last-round {
@@ -160,7 +196,7 @@
                             <img class="action" src="https://cdn-icons-png.flaticon.com/512/5574/5574134.png" />
                         </td>
                         <td class="type-label">ATTACK</td>
-                        <td class="h4">Deal 60 damage to the enemy. Ignore 100% damage reduction from <strong>Defense Cards</strong> except <strong>Holy Shield</strong> and disable healing effect from <strong>Support Cards</strong> when played by your enemy.</td>
+                        <td class="h4">Deal 60 damage to the enemy. Ignore 100% damage reduction from <strong>Defense Cards</strong> and disable healing effect from <strong>Support Cards</strong> when played by your enemy.</td>
                     </tr>
                     <tr>
                         <td class="text-center">
@@ -218,6 +254,23 @@
     </div>
 
     <div id="battle-container" class="row hidden">
+        <!-- Button trigger modal -->
+        <button type="button" class="hidden btn btn-primary" data-toggle="modal" data-target="#card-effect">
+            Launch demo modal
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="card-effect" tabindex="-1" role="dialog" aria-labelledby="card-effectLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="col-lg-12">
 
             <table class="table table-borderless">
@@ -278,119 +331,6 @@
             <table class="table table-borderless">
                 <tr class="row text-center">
                     <td class="col-lg-12" id="hand-cards-container"></td>
-                </tr>
-                <tr class="row">
-                    <td>
-                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                            Read Card Descriptions
-                        </button>
-                        <div class="collapse" id="collapseExample">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr class="text-center">
-                                        <td class="col-lg-4"><label>CARD NAME</label></td>
-                                        <td class="col-lg-2"><label>CARD TYPE</label></td>
-                                        <td class="col-lg-2"><label>LEFT IN DECK</label></td>
-                                        <td class="col-lg-4"><label>EFFECT</label></td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-center">
-                                            <h2>Sword Slash</h2>
-                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/4334/4334081.png" />
-                                        </td>
-                                        <td class="type-label">ATTACK</td>
-                                        <td name="Sword Slash" class="type-label">4</td>
-                                        <td class="h4">Deal 100 damage to the enemy.</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">
-                                            <h2>Battle Axe</h2>
-                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/1825/1825371.png" />
-                                        </td>
-                                        <td class="type-label">ATTACK</td>
-                                        <td name="Battle Axe" class="type-label">4</td>
-                                        <td class="h4">Deal 130 damage to the enemy then inflict 20 damage to own HP after. Reduce damage reduction by 50% when enemy uses a <strong>Defense Card</strong>.</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">
-                                            <h2>Arrow Shot</h2>
-                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/625/625445.png" />
-                                        </td>
-                                        <td class="type-label">ATTACK</td>
-                                        <td name="Arrow Shot" class="type-label">4</td>
-                                        <td class="h4">Deal 120 damage to the enemy if they play an <strong>Attack Card</strong> and only deal 80 damage if they play a <strong>Non-Attack Card (Defense/Support)</strong>.</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">
-                                            <h2>Assassin Dagger</h2>
-                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/5574/5574134.png" />
-                                        </td>
-                                        <td class="type-label">ATTACK</td>
-                                        <td name="Assassin Dagger" class="type-label">4</td>
-                                        <td class="h4">Deal 60 damage to the enemy. Ignore 100% damage reduction from <strong>Defense Cards</strong> except <strong>Holy Shield</strong> and disable healing effect from <strong>Support Cards</strong> when played by your enemy.</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">
-                                            <h2>Mighty Shield</h2>
-                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/929/929429.png" />
-                                        </td>
-                                        <td class="type-label">DEFENSE</td>
-                                        <td name="Mighty Shield" class="type-label">4</td>
-                                        <td class="h4">Block 60% damage from the enemy.</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">
-                                            <h2>Holy Shield</h2>
-                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/1044/1044007.png" />
-                                        </td>
-                                        <td class="type-label">DEFENSE</td>
-                                        <td name="Holy Shield" class="type-label">4</td>
-                                        <td class="h4">
-                                            Block 40% damage and deflect 20% damage back to the enemy if they deal damage to you. Enemy will receive 40% more healing if they play a <strong>Support Card</strong>.
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">
-                                            <h2>Defend and Counter</h2>
-                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/602/602048.png" />
-                                        </td>
-                                        <td class="type-label">DEFENSE</td>
-                                        <td name="Defend and Counter" class="type-label">4</td>
-                                        <td class="h4">Blocks 30% damage from the enemy then deal 40 damage to them.</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">
-                                            <h2>Magic Heal</h2>
-                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/693/693337.png" />
-                                        </td>
-                                        <td class="type-label">SUPPORT</td>
-                                        <td name="Magic Heal" class="type-label">4</td>
-                                        <td class="h4">Restore 50 HP</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">
-                                            <h2>Secret Herb</h2>
-                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/2917/2917995.png" />
-                                        </td>
-                                        <td class="type-label">SUPPORT</td>
-                                        <td name="Secret Herb" class="type-label">4</td>
-                                        <td class="h4">Restore 90 HP when enemy plays a <strong>Defense Card</strong> and restore only 30 HP when enemy plays a <strong>Non-Defense Card (Attack/Support)</strong>.</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">
-                                            <h2>Mercy Heal</h2>
-                                            <img class="action" src="https://cdn-icons-png.flaticon.com/512/1721/1721167.png" />
-                                        </td>
-                                        <td class="type-label">SUPPORT</td>
-                                        <td name="Mercy Heal" class="type-label">4</td>
-                                        <td class="h4">Restore 70 HP then restore 20 enemy HP.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </td>                    
                 </tr>
                 <tr>
                     <td id="battle-logs-container" colspan="3"></td>
@@ -472,21 +412,24 @@
                 Name: "Sword Slash",
                 Type: "Attack",
                 Damage: 100,
-                Image: "https://cdn-icons-png.flaticon.com/512/4334/4334081.png"
+                Image: "https://cdn-icons-png.flaticon.com/512/4334/4334081.png",
+                Description: "Deal 100 damage to the enemy."
             },
             {
                 CardId: 2,
                 Name: "Mighty Shield",
                 Type: "Defense",
                 Shield: 0.6,
-                Image: "https://cdn-icons-png.flaticon.com/512/929/929429.png"
+                Image: "https://cdn-icons-png.flaticon.com/512/929/929429.png",
+                Description: "Block 60% damage from the enemy."
             },
             {
                 CardId: 3,
                 Name: "Magic Heal",
                 Type: "Support",
                 Heal: 50,
-                Image: "https://cdn-icons-png.flaticon.com/512/693/693337.png"
+                Image: "https://cdn-icons-png.flaticon.com/512/693/693337.png",
+                Description: "Restore 50 HP"
             },
             {
                 CardId: 4,
@@ -495,7 +438,8 @@
                 Damage: 130,
                 Shield: 0.5,
                 HPPenalTy: 20,
-                Image: "https://cdn-icons-png.flaticon.com/512/1825/1825371.png"
+                Image: "https://cdn-icons-png.flaticon.com/512/1825/1825371.png",
+                Description: "Deal 130 damage to the enemy then inflict 20 damage to own HP after. Reduce damage reduction by 50% when enemy uses a <strong>Defense Card</strong>."
             },
             {
                 CardId: 5,
@@ -503,7 +447,8 @@
                 Type: "Support",
                 Heal: 90,
                 Heal2: 30,
-                Image: "https://cdn-icons-png.flaticon.com/512/2917/2917995.png"
+                Image: "https://cdn-icons-png.flaticon.com/512/2917/2917995.png",
+                Description: "Restore 90 HP when enemy plays a <strong>Defense Card</strong> and restore only 30 HP when enemy plays a <strong>Non-Defense Card (Attack/Support)</strong>."
             },
             {
                 CardId: 6,
@@ -511,7 +456,8 @@
                 Type: "Attack",
                 Damage: 120,
                 Damage2: 80,
-                Image: "https://cdn-icons-png.flaticon.com/512/625/625445.png"
+                Image: "https://cdn-icons-png.flaticon.com/512/625/625445.png",
+                Description: "Deal 120 damage to the enemy if they play an <strong>Attack Card</strong> and only deal 80 damage if they play a <strong>Non-Attack Card (Defense/Support)</strong>."
             },
             {
                 CardId: 7,
@@ -520,14 +466,16 @@
                 Shield: 0.4,
                 Reflect: 0.2,
                 Heal: 0.4,
-                Image: "https://cdn-icons-png.flaticon.com/512/1044/1044007.png"
+                Image: "https://cdn-icons-png.flaticon.com/512/1044/1044007.png",
+                Description: "Block 40% damage and deflect 20% damage back to the enemy if they deal damage to you. Enemy will receive 40% more healing if they play a <strong>Support Card</strong>."
             },
             {
                 CardId: 8,
                 Name: "Assassin Dagger",
                 Type: "Attack",
                 Damage: 60,
-                Image: "https://cdn-icons-png.flaticon.com/512/5574/5574134.png"
+                Image: "https://cdn-icons-png.flaticon.com/512/5574/5574134.png",
+                Description: "Deal 60 damage to the enemy. Ignore 100% damage reduction from <strong>Defense Cards</strong> and disable healing effect from <strong>Support Cards</strong> when played by your enemy."
             },
             {
                 CardId: 9,
@@ -535,7 +483,8 @@
                 Type: "Support",
                 Heal: 70,
                 EnemyHeal: 20,
-                Image: "https://cdn-icons-png.flaticon.com/512/1721/1721167.png"
+                Image: "https://cdn-icons-png.flaticon.com/512/1721/1721167.png",
+                Description: "Restore 70 HP then restore 20 enemy HP."
             },
             {
                 CardId: 10,
@@ -543,7 +492,8 @@
                 Type: "Defense",
                 Damage: 40,
                 Shield: 0.3,
-                Image: "https://cdn-icons-png.flaticon.com/512/602/602048.png"
+                Image: "https://cdn-icons-png.flaticon.com/512/602/602048.png",
+                Description: "Blocks 30% damage from the enemy then deal 40 damage to them."
             }
         ],
         cardDeck: [
@@ -553,7 +503,8 @@
                 Name: "Sword Slash",
                 Type: "Attack",
                 Damage: 100,
-                Image: "https://cdn-icons-png.flaticon.com/512/4334/4334081.png"
+                Image: "https://cdn-icons-png.flaticon.com/512/4334/4334081.png",
+                Description: ""
             },
             {
                 Id: 2,
@@ -965,6 +916,7 @@
             $("#btn-battle-again").on("click", module.onBattleAgain);
             $("#btn-reset-account").on("click", module.onResetAccount);
             $("#btn-auto-battle").on("click", module.onAutoBattle);
+            $("body").delegate(".btn-card-effect", "click", module.onShowCardEffect);
         },
         addEditProfile: function (data) {
             module.profile = data;
@@ -991,7 +943,7 @@
             if ((currentHP - damage) > (isPlayer ? module.maxHP() : module.enemyMaxHP()))
                 return (isPlayer ? module.maxHP() : module.enemyMaxHP());
             else {
-                return Math.round(currentHP - damage);
+                return Math.round(currentHP - damage) < 1 ? 0 : Math.round(currentHP - damage);
             }
         },
         checkIfBattleReady: function () {
@@ -2549,6 +2501,40 @@
                 module.checkIfBattleReady();
             }
         },
+        onShowCardEffect: function () {
+            var cardId = $(this).attr("data-id");
+
+            var card = module.cards.filter(function (i) {
+                return i.CardId == cardId;
+            })[0];
+
+            var profile = module.getProfile();
+
+            var template = "<table class='table table-bordered'>" +                                
+                                "<thead>" +
+                                    "<tr class='text-center'>" +
+                                        "<td class='col-lg-4'><label>CARD NAME</label></td>" +
+                                        "<td class='col-lg-2'><label>CARD TYPE</label></td>" +
+                                        "<td class='col-lg-2'><label>LEFT IN DECK</label></td>" +
+                                        "<td class='col-lg-4'><label>EFFECT</label></td>" +
+                                    "</tr>" +
+                                "</thead>" +
+                                "<tbody>" +
+                                    "<tr>" +
+                                        "<td class='col-lg-3 text-center'>" +
+                                            "<h4>" + card.Name + "</h4>" +
+                                            "<img class='action-md' src='"+ card.Image +"' />" +
+                                        "</td>" +
+                                        "<td class='col-lg-2 text-center'><label>" + card.Type + "</label></td>" +
+                                        "<td class='col-lg-2 text-center'><label>" + profile.PlayerCards.filter(function (i) { return i.CardId == card.CardId; }).length + "</label></td>" +
+                                        "<td class='col-lg-5'>" + card.Description + "</td>" +
+                                    "</tr>" +
+                                "</tbody>" +
+                            "</table>";
+
+            $("#card-effect .modal-body").html(template);
+            $("#card-effect").modal("show");
+        },
         onViewCards: function () {
             if ($(this).text() == "View")
                 $(this).text("Hide");
@@ -2569,7 +2555,7 @@
             var template = "<h2>Action Cards</h2>";
 
             for (var i = 0; i < ownCards.length; i++) {
-                template += "<button data-id='" + ownCards[i].Id + "' title='" + ownCards[i].Name + "' class='action'><img src='" + ownCards[i].Image + "' /></button>";
+                template += "<button data-id='" + ownCards[i].Id + "' title='" + ownCards[i].Name + "' class='action'><img src='" + ownCards[i].Image + "' /></button><button data-id='" + ownCards[i].CardId + "' title='Show Card Description' class='btn btn-primary btn-circle btn-card-effect'><span class='glyphicon glyphicon-question-sign'></span></button>";
             }
 
             if (module.autoBattle) {
@@ -2690,6 +2676,9 @@
         },
         updateHPBars: function () {
             var profile = module.getProfile();
+
+            profile.PlayerHP = profile.PlayerHP < 0 ? 0 : profile.PlayerHP;
+            profile.EnemyHP = profile.EnemyHP < 0 ? 0 : profile.EnemyHP;
 
             var playerHPPctg = ((profile.PlayerHP / module.maxHP()) * 100);
             var enemyHPPctg = ((profile.EnemyHP / module.enemyMaxHP()) * 100);
