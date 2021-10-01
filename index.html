@@ -147,7 +147,7 @@
                         <td>
                             <button id="btn-battle" class="btn btn-default">Battle!</button>
                             <button id="btn-auto-battle" class="btn btn-default">Auto-Battle!</button>
-                            <button class="btn btn-default">PVP</button>
+                            <button id="btn-pvp" class="btn btn-default">PVP</button>
                             <button class="btn btn-default">Market</button>
                             <button id="btn-reset-account" class="btn btn-default">Reset Account</button>
                         </td>
@@ -351,6 +351,10 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<!-- PVP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.2.6/mqtt.min.js" integrity="sha512-DD/bXhp28PWFubyhBKR7vt5FUMRCbEJ8KtC4Oq/MTWniMUytsPM5pFDaUTaHDRd7zC8cHpKvv6FaUI2OP/czlw==" crossorigin="anonymous"></script>
+<script src="pvp.js"></script>
 
 <script>
     var terms = {
@@ -908,6 +912,7 @@
                 module.autoBattle = false;
                 module.onBattle();
             });
+            $("#btn-pvp").on("click", module.onPVP);
             $("#btn-save-player").on("click", module.onSavePlayer);
             $("#btn-view-cards").on("click", module.onViewCards);
             $("body").delegate("button.action", "click", module.onSelectAction);
@@ -2386,6 +2391,14 @@
 
             module.gameRound(module.currentRound);
         },
+        onPVP: function () {
+            pvpModule.joinRoom(prompt("Please enter room id"));
+            
+            module.onBattle();
+            module.pvp = true;
+
+            $("#enemy-name-label").text("Waitings for Enemy to Join...");
+        },
         onConfirmBattle: function () {
             var profile = module.getProfile();
 
@@ -2419,7 +2432,14 @@
 
             module.battleLogs += "<h3>Round " + module.currentRound + "</h3>";
 
-            module.getMoveResult(1, enemyActions);
+            if (!module.pvp)
+                module.getMoveResult(1, enemyActions);
+            else {
+                $("#btn-confirm").prop( "disabled", true);
+                $("#btn-confirm").html("Waiting For Enemy Attack");
+                pvpModule.addEditProfile(profile);
+                pvpModule.getMoveResult(module.getMovesDetails('all'));
+            }
         },
         onResetAccount: function () {
             localStorage.removeItem("Profile");
@@ -2786,5 +2806,58 @@
         }
     };
 
+    var pvpOptions = {
+        playerName: JSON.parse(localStorage.getItem("Profile")).Name,
+        addEditProfile: (payload) => {
+            var profile = module.getProfile();
+
+            console.log(payload);
+
+            if (profile.Name == payload.Name) {
+                profile.PlayerCards = payload.PlayerCards;
+                profile.PlayerHP = payload.PlayerHP;
+                profile.PlayerHands = payload.PlayerHands;
+                profile.PlayerUsedCards = payload.PlayerUsedCards;
+            } else {
+                profile.EnemyCards = payload.PlayerCards;
+                profile.EnemyHP = payload.PlayerHP;
+                profile.EnemyHands = payload.PlayerHands;
+                profile.EnemyUsedCards = payload.PlayerUsedCards;    
+            }
+
+            module.profile = profile;
+            localStorage.setItem("Profile", JSON.stringify(module.profile));
+        },
+        getMoveResult: (moves) => {
+            pvpModule.combatStatus++;
+            console.log("combat status: " + pvpModule.combatStatus)
+
+            console.log(moves);
+            if (JSON.stringify(moves) != JSON.stringify(module.getMovesDetails('all')))
+                localStorage.setItem('EnemyMoves', JSON.stringify(moves));
+
+            if (pvpModule.combatStatus == 2) {
+                pvpModule.combatStatus = 0;
+                enemyMovesCard = JSON.parse(localStorage.getItem('EnemyMoves'));
+                enemyMoves = [];
+                enemyMoves[0] = module.getCardDeckById(enemyMovesCard.FirstId);
+                enemyMoves[1] = module.getCardDeckById(enemyMovesCard.SecondId);
+                enemyMoves[2] = module.getCardDeckById(enemyMovesCard.LastId);
+                module.getMoveResult(1, enemyMoves);
+                $("#btn-confirm").prop( "disabled", false);
+                $("#btn-confirm").html("Proceed Battle!");
+            }
+        },
+        onJoin: (name) => {
+            console.log(name);
+            if (name.Name != JSON.parse(localStorage.getItem("Profile")).Name) {
+                $("#enemy-name-label").text(name.Name);
+                alert("The Battle Begins");
+                pvpModule.onJoin();
+            }
+        }
+    };
+
     $(window).on("load", module.onLoad);
+    $(window).on("load", pvpModule.onLoad(pvpOptions));
 </script>
