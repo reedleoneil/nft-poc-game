@@ -3,6 +3,28 @@
         padding-top: 50px;
     }
 
+    .defeated-player {
+        font-size: 30px;
+        font-weight: 900;
+        position: absolute;
+        left: 120px;
+        top: 250px;
+        transform: rotate( -35deg) skew( -10deg);
+        background-color: #ffc;
+        z-index: 9;
+    }
+
+    .defeated-enemy {
+        font-size: 30px;
+        font-weight: 900;
+        position: absolute;
+        left: 880px;
+        top: 250px;
+        transform: rotate( -35deg) skew( -10deg);
+        background-color: #ffc;
+        z-index: 9;
+    }
+
     .btn.btn-primary.btn-circle {
         position: absolute;
         margin-left: -40px;
@@ -94,6 +116,31 @@
     .progress-bar-danger {
         background-color: #d9534f;
     }
+
+    .bounce {
+        animation: bounce 0.75s infinite alternate;
+        -webkit-animation: bounce 0.75s infinite alternate;
+    }
+
+    @@keyframes bounce {
+        from {
+            transform: translateY(0px);
+        }
+    
+        to {
+            transform: translateY(-10px);
+        }
+    }
+
+    @@-webkit-keyframes bounce {
+        from {
+            transform: translateY(0px);
+        }
+    
+        to {
+            transform: translateY(-10px);
+        }
+    }
 </style>
 
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -157,7 +204,7 @@
         </div>
 
         <div id="cards-container" class="col-lg-12 hidden">
-            <table class="table table-bordered">
+            <table class="table table-borderless">
                 <thead>
                     <tr class="text-center">
                         <td class="col-lg-4"><label>CARD NAME</label></td>
@@ -278,27 +325,44 @@
                     <td id="round-label" colspan="3" class="h1">Round 1</td>
                 </tr>
                 <tr>
-                    <td class="col-lg-5 text-center">
+                    <td class="col-lg-4 text-center">
                         <h2 class="player-name"></h2>
                         <h4 id="player-hp-label"><strong>(1000/1000 HP)</strong></h4>
                         <div class="progress margin-md-bottom">
                             <div id="player-hp" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1000"
-                                 aria-valuemin="0" aria-valuemax="" style="width:100%">
+                                 aria-valuemin="0" aria-valuemax="100" style="width:100%">
                             </div>
                         </div>
-                        <div class="margin-lg-bottom"><img class="img-avatar" src="https://cdn-icons-png.flaticon.com/512/4352/4352135.png" /></div>
+                        <div class="margin-lg-bottom">
+                            <img class="img-avatar bounce" id="player-image" src="https://cdn-icons-png.flaticon.com/512/4352/4352135.png" />
+                            <div id="player-status"></div>
+                        </div>
                         <div id="player-last-round" class="text-center"></div>
                     </td>
-                    <td class="col-lg-2 text-center"><h1>VS.</h1></td>
-                    <td class="col-lg-5 text-center">
+                    <td class="col-lg-4 text-center">
+                        <h1>VS.</h1>
+                        <h2><strong id="move-label"></strong></h2>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <img id="player-move" class="action-md hidden" src="" />
+                            </div>
+                            <div class="col-lg-6">
+                                <img id="enemy-move" class="action-md hidden" src="" />
+                            </div>
+                        </div>
+                    </td>
+                    <td class="col-lg-4 text-center">
                         <h2 id="enemy-name-label">Fluff Monster</h2>
                         <h4 id="enemy-hp-label"><strong>(1000/1000 HP)</strong></h4>
                         <div class="progress margin-md-bottom">
-                            <div id="enemy-hp" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1500"
-                                 aria-valuemin="0" aria-valuemax="" style="width:100%">
+                            <div id="enemy-hp" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="1000"
+                                 aria-valuemin="0" aria-valuemax="100" style="width:100%">
                             </div>
                         </div>
-                        <div class="margin-lg-bottom"><img class="img-avatar" id="enemy-image" src="" /></div>
+                        <div class="margin-lg-bottom">
+                            <img class="img-avatar bounce" id="enemy-image" src="" />
+                            <div id="enemy-status">DEFEATED</div>
+                        </div>
                         <div id="enemy-last-round" class="text-center"></div>
                     </td>
                 </tr>
@@ -948,7 +1012,7 @@
             if ((currentHP - damage) > (isPlayer ? module.maxHP() : module.enemyMaxHP()))
                 return (isPlayer ? module.maxHP() : module.enemyMaxHP());
             else {
-                return Math.round(currentHP - damage) < 1 ? 0 : Math.round(currentHP - damage);
+                return Math.round(currentHP - damage);
             }
         },
         checkIfBattleReady: function () {
@@ -1483,12 +1547,12 @@
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
+                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, playerMove.HPPenalTy);
+                    module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Penalty, playerMove, enemyMove);
+
                     profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
-
-                    profile.PlayerHP = module.deductHP(true, profile.PlayerHP, playerMove.HPPenalTy);
-                    module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Penalty, playerMove, enemyMove);
                 }
                 else if (enemyMove.Name == terms.Cards.MightyShield) {                    
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
@@ -1741,6 +1805,9 @@
                 }
                 else if (enemyMove.Name == terms.Cards.MercyHeal) {
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Dealt, playerMove, enemyMove);
+
+                    profile.PlayerHP = module.addHP(true, profile.PlayerHP, enemyMove.Heal);
+                    module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Heal, playerMove, enemyMove, false);
 
                     profile.EnemyHP = module.deductHP(false, profile.EnemyHP, playerMove.Damage);
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Took, playerMove, enemyMove);
@@ -2214,6 +2281,9 @@
                     module.battleLogs += module.getBattleLog(profile, true, terms.Actions.Took, playerMove, enemyMove);
 
                     module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Dealt, playerMove, enemyMove);
+
+                    profile.EnemyHP = module.addHP(false, profile.EnemyHP, playerMove.EnemyHeal);
+                    module.battleLogs += module.getBattleLog(profile, false, terms.Actions.Heal, playerMove, enemyMove, true);
                 }
                 else if (enemyMove.Name == terms.Cards.MightyShield) {
                     profile.PlayerHP = module.addHP(true, profile.PlayerHP, playerMove.Heal);
@@ -2309,11 +2379,43 @@
 
             profile = module.getHPCalculation(profile, playerMove, enemyMove);
 
+            if (movePosition == 1) {
+                $("#move-label").html("First Move");
+            }
+            else if (movePosition == 2) {
+                $("#move-label").html("Second Move");
+            }
+            else {
+                $("#move-label").html("Last Move");
+            }
+
+            $("#player-move").attr("src", playerMove.Image)
+                .removeClass("hidden")
+                .fadeIn("slow");
+
+            $("#enemy-move").attr("src", enemyMove.Image)
+                .removeClass("hidden")
+                .fadeIn("slow");
+
             module.addEditProfile(profile);
 
             module.updateHPBars();
 
-            module.checkWinner(movePosition, data);
+            setTimeout(function () {
+                $("#player-move").attr("src", "")
+                    .addClass("hidden")
+                    .fadeOut("slow");
+
+                $("#enemy-move").attr("src", "")
+                    .addClass("hidden")
+                    .fadeOut("slow");
+
+                $("#move-label").html("");
+
+                setTimeout(function () {
+                    module.checkWinner(movePosition, data);
+                }, 750);
+            }, 750);
         },
         onAutoBattle: function () {
             module.autoBattle = true;
@@ -2360,6 +2462,12 @@
             module.onBattle();
         },
         onBattle: function () {
+            $("#player-image").addClass("bounce");
+            $("#enemy-image").addClass("bounce");
+
+            $("#player-status").text("").removeClass("defeated-player");
+            $("#enemy-status").text("").removeClass("defeated-enemy");
+
             module.currentRound = 1;
 
             $("#saved-player-container").addClass("hidden");
@@ -2636,6 +2744,9 @@
                 if (result == "Win") {
                     module.status = "end";
 
+                    $("#enemy-image").removeClass("bounce");
+                    $("#enemy-status").text("DEFEATED").addClass("defeated-enemy");
+
                     module.battleLogs = "<label class='text-success'><h2>You Win!</h2></label>" + module.battleLogs;
 
                     var profile = module.getProfile();
@@ -2660,6 +2771,9 @@
                 else if (result == "Lose") {
                     module.status = "end";
 
+                    $("#player-image").removeClass("bounce");
+                    $("#player-status").text("DEFEATED").addClass("defeated-player");
+
                     $("#btn-confirm").addClass("hidden");
                     $("#btn-battle-again").toggleClass("hidden");
                     module.battleLogs = "<label class='text-danger'><h2>You Lose!</h2></label>" + module.battleLogs;
@@ -2671,6 +2785,12 @@
                     }
                 }
                 else {
+                    $("#player-image").removeClass("bounce");
+                    $("#enemy-image").removeClass("bounce");
+
+                    $("#player-status").text("DEFEATED").addClass("defeated-player");
+                    $("#enemy-status").text("DEFEATED").addClass("defeated-enemy");
+
                     $("#btn-confirm").addClass("hidden");
                     $("#btn-battle-again").toggleClass("hidden");
                     module.battleLogs = "<label class='text-info'><h2>Draw!</h2></label>" + module.battleLogs;
@@ -2710,8 +2830,8 @@
             $("#player-hp").attr("aria-valuenow", profile.PlayerHP)
                 .css("width", playerHPPctg + "%");
 
-            $("#player-hp-label").html("<strong>(" + profile.PlayerHP + "/" + module.maxHP() + " HP)</strong>");
-            $("#enemy-hp-label").html("<strong>(" + profile.EnemyHP + "/" + module.enemyMaxHP() + " HP)</strong>")
+            $("#player-hp-label").html("<strong>(" + (profile.PlayerHP < 0 ? 0 : profile.PlayerHP) + "/" + module.maxHP() + " HP)</strong>");
+            $("#enemy-hp-label").html("<strong>(" + (profile.EnemyHP < 0 ? 0 : profile.EnemyHP) + "/" + module.enemyMaxHP() + " HP)</strong>")
 
             $("#enemy-hp").attr("aria-valuemax", module.enemyMaxHP());
             $("#enemy-hp").attr("aria-valuenow", profile.EnemyHP)
