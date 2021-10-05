@@ -1,0 +1,56 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.2.6/mqtt.min.js" integrity="sha512-DD/bXhp28PWFubyhBKR7vt5FUMRCbEJ8KtC4Oq/MTWniMUytsPM5pFDaUTaHDRd7zC8cHpKvv6FaUI2OP/czlw==" crossorigin="anonymous"></script>
+        <script src="rankings.js"></script>
+
+        <div>
+            <table>
+                <tbody id="rankings">
+                    <tr>
+                        <th>Name</th>
+                        <th>Wins</th>
+                        <th>Loses</th>
+                        <th>Draws</th>
+                      </tr>
+                </tbody>
+              </table>
+        </div>
+
+        <script>
+            rankings.onLoad({});
+
+            setTimeout(function() {
+                rankings.players.forEach(element => {
+                    var tr = document.createElement("tr");    
+
+                    var tdName = document.createElement("td");
+                    var textnodeName = document.createTextNode(element.name);       
+                    tdName.appendChild(textnodeName);      
+                    
+                    var tdWins = document.createElement("td");
+                    var textnodeWins = document.createTextNode(element.wins);       
+                    tdWins.appendChild(textnodeWins);  
+
+                    var tdLose = document.createElement("td");
+                    var textnodeLose = document.createTextNode(element.loses);       
+                    tdLose.appendChild(textnodeLose);  
+
+                    var tdDraw = document.createElement("td");
+                    var textnodeDraw = document.createTextNode(element.draws);       
+                    tdDraw.appendChild(textnodeDraw); 
+
+                    
+                    tr.appendChild(tdName); 
+                    tr.appendChild(tdWins); 
+                    tr.appendChild(tdLose); 
+                    tr.appendChild(tdDraw); 
+                    document.getElementById("rankings").appendChild(tr); 
+                    console.log(element);
+                });
+            }, 3000);
+        </script>
+    </body>
+</html>

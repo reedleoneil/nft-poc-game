@@ -1033,14 +1033,26 @@
             if (profile.PlayerHP <= 0 && profile.EnemyHP <= 0) {
                 //alert("Draw!");
                 module.showRoundBattleLog("Draw");
+                if (module.pvp) {
+                    pvpModule.updateRankings("Draw");
+                    window.location = "rankings.html";
+                }
             }
             else if (profile.EnemyHP <= 0) {
                 //alert("You Win!");
                 module.showRoundBattleLog("Win");
+                if (module.pvp) {
+                    pvpModule.updateRankings("Win");
+                    window.location = "rankings.html";
+                }
             }
             else if (profile.PlayerHP <= 0) {
                 //alert("You Lose!");
                 module.showRoundBattleLog("Lose");
+                if (module.pvp) {
+                    pvpModule.updateRankings("Lose");
+                    window.location = "rankings.html";
+                }
             }
             else {
                 movePosition++;
@@ -2500,12 +2512,12 @@
             module.gameRound(module.currentRound);
         },
         onPVP: function () {
-            pvpModule.joinRoom(prompt("Please enter room id"));
-            
-            module.onBattle();
-            module.pvp = true;
+            pvpModule.findMatch();
+            $("#btn-pvp").prop( "disabled", true);
+            $("#btn-battle").prop( "disabled", true);
+            $("#btn-auto-battle").prop( "disabled", true);
+            $("#btn-pvp").text( "Finding Match...");
 
-            $("#enemy-name-label").text("Waitings for Enemy to Join...");
         },
         onConfirmBattle: function () {
             var profile = module.getProfile();
@@ -2975,6 +2987,21 @@
                 alert("The Battle Begins");
                 pvpModule.onJoin();
             }
+        },
+        onMatchFound: (room) => {
+            console.log(room);
+
+            pvpModule.joinRoom(room.Id);
+                        
+            module.onBattle();
+            module.pvp = true;
+
+            $("#enemy-name-label").text("Waitings for Enemy to Join...");
+
+            $("#btn-pvp").prop( "disabled", false);
+            $("#btn-battle").prop( "disabled", false);
+            $("#btn-auto-battle").prop( "disabled", false);
+            $("#btn-pvp").text( "PVP");
         }
     };
 

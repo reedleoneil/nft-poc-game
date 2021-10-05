@@ -1,0 +1,19 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.2.6/mqtt.min.js" integrity="sha512-DD/bXhp28PWFubyhBKR7vt5FUMRCbEJ8KtC4Oq/MTWniMUytsPM5pFDaUTaHDRd7zC8cHpKvv6FaUI2OP/czlw==" crossorigin="anonymous"></script>
+        <script src="pvpServer.js"></script>
+
+        <script>
+            pvpServer.onLoad({
+                maxRooms: 9999
+            });
+
+            window.setInterval(function(){
+                pvpServer.ping();
+            }, 60000);
+        </script>
+    </body>
+</html>
